@@ -2,12 +2,14 @@ package controllers
 
 import (
     "strconv"
-    "github.com/gofiber/fiber/v2"
 
-	"fiber-be-template/models"
+    "github.com/gofiber/fiber/v2"
+    "fiber-be-template/models"
+    "fiber-be-template/dtos/users/requests"
+    "fiber-be-template/dtos/users/responses"
 )
 
-var users = []models.User{
+var usersStore = []models.User{
     {ID: 1, Name: "Alice", Email: "alice@example.com"},
     {ID: 2, Name: "Bob", Email: "bob@example.com"},
 }
@@ -17,10 +19,18 @@ var users = []models.User{
 // @Description Returns list of users
 // @Tags users
 // @Produce json
-// @Success 200 {array} models.User
+// @Success 200 {array} responses.UserResponseDto
 // @Router /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
-    return c.JSON(users)
+    var result []responses.UserResponseDto
+    for _, u := range usersStore {
+        result = append(result, responses.UserResponseDto{
+            ID:    u.ID,
+            Name:  u.Name,
+            Email: u.Email,
+        })
+    }
+    return c.JSON(result)
 }
 
 // GetUserByID godoc
@@ -29,7 +39,7 @@ func GetUsers(c *fiber.Ctx) error {
 // @Tags users
 // @Produce json
 // @Param id path int true "User ID"
-// @Success 200 {object} models.User
+// @Success 200 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
 // @Router /api/users/{id} [get]
@@ -39,9 +49,13 @@ func GetUserByID(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid ID"})
     }
 
-    for _, user := range users {
-        if user.ID == id {
-            return c.JSON(user)
+    for _, u := range usersStore {
+        if u.ID == id {
+            return c.JSON(responses.UserResponseDto{
+                ID:    u.ID,
+                Name:  u.Name,
+                Email: u.Email,
+            })
         }
     }
 
@@ -54,18 +68,27 @@ func GetUserByID(c *fiber.Ctx) error {
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param user body models.User true "User to create"
-// @Success 201 {object} models.User
+// @Param user body requests.CreateUserRequestDto true "User to create"
+// @Success 201 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string
 // @Router /api/users [post]
 func CreateUser(c *fiber.Ctx) error {
-    var user models.User
-    if err := c.BodyParser(&user); err != nil {
+    var req requests.CreateUserRequestDto
+    if err := c.BodyParser(&req); err != nil {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
     }
 
-    user.ID = len(users) + 1
-    users = append(users, user)
+    newUser := models.User{
+        ID:    len(usersStore) + 1,
+        Name:  req.Name,
+        Email: req.Email,
+    }
 
-    return c.Status(201).JSON(user)
+    usersStore = append(usersStore, newUser)
+
+    return c.Status(201).JSON(responses.UserResponseDto{
+        ID:    newUser.ID,
+        Name:  newUser.Name,
+        Email: newUser.Email,
+    })
 }

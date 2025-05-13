@@ -31,7 +31,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/responses.UserResponseDto"
                             }
                         }
                     }
@@ -56,7 +56,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/requests.CreateUserRequestDto"
                         }
                     }
                 ],
@@ -64,7 +64,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/responses.UserResponseDto"
                         }
                     },
                     "400": {
@@ -102,7 +102,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/responses.UserResponseDto"
                         }
                     },
                     "400": {
@@ -128,7 +128,18 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.User": {
+        "requests.CreateUserRequestDto": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.UserResponseDto": {
             "type": "object",
             "properties": {
                 "email": {

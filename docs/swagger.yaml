@@ -1,6 +1,13 @@
 basePath: /
 definitions:
-  models.User:
+  requests.CreateUserRequestDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  responses.UserResponseDto:
     properties:
       email:
         type: string
@@ -25,7 +32,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.User'
+              $ref: '#/definitions/responses.UserResponseDto'
             type: array
       summary: Get all users
       tags:
@@ -40,14 +47,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/requests.CreateUserRequestDto'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/responses.UserResponseDto'
         "400":
           description: Bad Request
           schema:
@@ -72,7 +79,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/responses.UserResponseDto'
         "400":
           description: Bad Request
           schema:

@@ -24,7 +24,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/responses.UserResponseDto"
                             }
                         }
                     }
@@ -49,7 +49,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/requests.CreateUserRequestDto"
                         }
                     }
                 ],
@@ -57,7 +57,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/responses.UserResponseDto"
                         }
                     },
                     "400": {
@@ -95,7 +95,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/responses.UserResponseDto"
                         }
                     },
                     "400": {
@@ -121,7 +121,18 @@
         }
     },
     "definitions": {
-        "models.User": {
+        "requests.CreateUserRequestDto": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.UserResponseDto": {
             "type": "object",
             "properties": {
                 "email": {
