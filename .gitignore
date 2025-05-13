@@ -1,0 +1,62 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of go build
+/build/
+bin/
+dist/
+
+# Go cache & test binaries
+*.out
+*.log
+*.prof
+
+# Dependency directories (Go Modules)
+vendor/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+*.swp
+
+# Environment files
+.env
+.env.*
+
+# Swagger generated files (you can exclude docs/ if it's auto-generated)
+docs/swagger.yaml
+docs/swagger.json
+
+# Database-related
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Coverage reports
+coverage.*
+*.coverprofile
+*.lcov
+
+# Local-only debug config
+debug/
+
+# Ignore real env files
+.env
+.env.*
+
+# But keep example files
+!.env.example

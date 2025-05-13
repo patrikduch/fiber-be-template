@@ -14,11 +14,21 @@ import (
     "fiber-be-template/routes"
 
 	"github.com/gofiber/swagger" // 👈 Swagger UI handler
-    _ "fiber-be-template/docs" // 👈 Your generated docs
+    _ "fiber-be-template/docs" // 👈 Generated docs
+	"github.com/joho/godotenv"
+	"fiber-be-template/database"
 )
 
 func main() {
     app := fiber.New()
+
+ 	// Load environment variables
+    if err := godotenv.Load(); err != nil {
+        log.Println("⚠️  .env file not found, using system env vars")
+    }
+
+    // Initialize DB
+    database.Init()
 
     // Middleware
     app.Use(logger.New())
@@ -32,12 +42,9 @@ func main() {
         return c.SendString("Hello, Fiber!")
     })
 
-    app.Get("/api/health", func(c *fiber.Ctx) error {
-        return c.JSON(fiber.Map{"status": "ok"})
-    })
-
     // Register user routes
-    routes.RegisterUserRoutes(app)
+    routes.RegisterUserRoutes(app);
+	routes.RegisterHealthRoutes(app);
 
     // Start server
     log.Fatal(app.Listen(":3000"))

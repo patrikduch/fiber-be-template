@@ -4,17 +4,9 @@ import (
     "strconv"
 
     "github.com/gofiber/fiber/v2"
-
-    "fiber-be-template/models"
     "fiber-be-template/dtos/users/requests"
-    "fiber-be-template/dtos/users/responses"
-    userMappers "fiber-be-template/mappers/users"
+    "fiber-be-template/services/users"
 )
-
-var usersStore = []models.User{
-    {ID: 1, Name: "Alice", Email: "alice@example.com"},
-    {ID: 2, Name: "Bob", Email: "bob@example.com"},
-}
 
 // GetUsers godoc
 // @Summary Get all users
@@ -24,9 +16,9 @@ var usersStore = []models.User{
 // @Success 200 {array} responses.UserResponseDto
 // @Router /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
-    var result []responses.UserResponseDto
-    for _, u := range usersStore {
-        result = append(result, userMappers.ToUserResponseDto(u))
+    result, err := users.GetAllUsers()
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
     }
     return c.JSON(result)
 }
@@ -47,13 +39,15 @@ func GetUserByID(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid ID"})
     }
 
-    for _, u := range usersStore {
-        if u.ID == id {
-            return c.JSON(userMappers.ToUserResponseDto(u))
+    user, err := users.GetUserByID(id)
+    if err != nil {
+        if err.Error() == "not found" {
+            return c.Status(404).JSON(fiber.Map{"error": "User not found"})
         }
+        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
     }
 
-    return c.Status(404).JSON(fiber.Map{"error": "User not found"})
+    return c.JSON(user)
 }
 
 // CreateUser godoc
@@ -65,6 +59,7 @@ func GetUserByID(c *fiber.Ctx) error {
 // @Param user body requests.CreateUserRequestDto true "User to create"
 // @Success 201 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
 // @Router /api/users [post]
 func CreateUser(c *fiber.Ctx) error {
     var req requests.CreateUserRequestDto
@@ -72,8 +67,10 @@ func CreateUser(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
     }
 
-    newUser := userMappers.ToUserModel(req, len(usersStore)+1)
-    usersStore = append(usersStore, newUser)
+    user, err := users.CreateUser(req)
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+    }
 
-    return c.Status(201).JSON(userMappers.ToUserResponseDto(newUser))
+    return c.Status(201).JSON(user)
 }
