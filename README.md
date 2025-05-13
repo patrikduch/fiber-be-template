@@ -23,3 +23,8 @@ This is a simple backend template built with [Go Fiber v2](https://github.com/go
 git clone https://github.com/patrikduch/fiber-be-template.git
 cd fiber-be-template
 go mod init github.com/patrikduch/fiber-be-template
+
+
+
+swag init
+

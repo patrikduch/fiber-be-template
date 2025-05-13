@@ -1,3 +1,7 @@
+// @title Fiber BE Template API
+// @version 1.0
+// @description Fiber backend template
+// @BasePath /
 package main
 
 import (
@@ -8,6 +12,9 @@ import (
     "github.com/gofiber/fiber/v2/middleware/cors"
 
     "fiber-be-template/routes"
+
+	"github.com/gofiber/swagger" // 👈 Swagger UI handler
+    _ "fiber-be-template/docs" // 👈 Your generated docs
 )
 
 func main() {
@@ -16,6 +23,9 @@ func main() {
     // Middleware
     app.Use(logger.New())
     app.Use(cors.New())
+
+	   // Swagger UI
+    app.Get("/swagger/*", swagger.HandlerDefault)
 
     // Health route
     app.Get("/", func(c *fiber.Ctx) error {
