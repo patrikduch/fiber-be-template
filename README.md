@@ -8,6 +8,7 @@ This is a simple backend template built with [Go Fiber v2](https://github.com/go
 - 🌍 CORS enabled by default
 - 🔐 `.env` configuration support
 - 📜 Request logging with middleware
+- 📘 Swagger (OpenAPI) documentation
 - 🧪 Easily extendable for routes, services, and database layers
 
 ## Getting Started
