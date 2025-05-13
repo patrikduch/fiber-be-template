@@ -4,9 +4,11 @@ import (
     "strconv"
 
     "github.com/gofiber/fiber/v2"
+
     "fiber-be-template/models"
     "fiber-be-template/dtos/users/requests"
     "fiber-be-template/dtos/users/responses"
+    userMappers "fiber-be-template/mappers/users"
 )
 
 var usersStore = []models.User{
@@ -24,11 +26,7 @@ var usersStore = []models.User{
 func GetUsers(c *fiber.Ctx) error {
     var result []responses.UserResponseDto
     for _, u := range usersStore {
-        result = append(result, responses.UserResponseDto{
-            ID:    u.ID,
-            Name:  u.Name,
-            Email: u.Email,
-        })
+        result = append(result, userMappers.ToUserResponseDto(u))
     }
     return c.JSON(result)
 }
@@ -51,11 +49,7 @@ func GetUserByID(c *fiber.Ctx) error {
 
     for _, u := range usersStore {
         if u.ID == id {
-            return c.JSON(responses.UserResponseDto{
-                ID:    u.ID,
-                Name:  u.Name,
-                Email: u.Email,
-            })
+            return c.JSON(userMappers.ToUserResponseDto(u))
         }
     }
 
@@ -78,17 +72,8 @@ func CreateUser(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
     }
 
-    newUser := models.User{
-        ID:    len(usersStore) + 1,
-        Name:  req.Name,
-        Email: req.Email,
-    }
-
+    newUser := userMappers.ToUserModel(req, len(usersStore)+1)
     usersStore = append(usersStore, newUser)
 
-    return c.Status(201).JSON(responses.UserResponseDto{
-        ID:    newUser.ID,
-        Name:  newUser.Name,
-        Email: newUser.Email,
-    })
+    return c.Status(201).JSON(userMappers.ToUserResponseDto(newUser))
 }
