@@ -22,6 +22,27 @@ info:
   title: Fiber BE Template API
   version: "1.0"
 paths:
+  /api/health:
+    get:
+      description: Returns app and DB status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health check
+      tags:
+      - health
   /api/users:
     get:
       description: Returns list of users
@@ -57,6 +78,12 @@ paths:
             $ref: '#/definitions/responses.UserResponseDto'
         "400":
           description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
           schema:
             additionalProperties:
               type: string

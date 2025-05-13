@@ -1,11 +1,12 @@
 package controllers
 
 import (
-    "strconv"
+
 
     "github.com/gofiber/fiber/v2"
     "fiber-be-template/dtos/users/requests"
     "fiber-be-template/services/users"
+
 )
 
 // GetUsers godoc
@@ -34,17 +35,17 @@ func GetUsers(c *fiber.Ctx) error {
 // @Failure 404 {object} map[string]string
 // @Router /api/users/{id} [get]
 func GetUserByID(c *fiber.Ctx) error {
-    id, err := strconv.Atoi(c.Params("id"))
-    if err != nil {
-        return c.Status(400).JSON(fiber.Map{"error": "Invalid ID"})
-    }
-
+    id := c.Params("id") // this is a string
     user, err := users.GetUserByID(id)
     if err != nil {
-        if err.Error() == "not found" {
-            return c.Status(404).JSON(fiber.Map{"error": "User not found"})
-        }
-        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error": err.Error(),
+        })
+    }
+    if user == nil {
+        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+            "error": "User not found",
+        })
     }
 
     return c.JSON(user)
