@@ -7,6 +7,20 @@ definitions:
       name:
         type: string
     type: object
+  requests.RegisterUserRequestDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
   responses.UserResponseDto:
     properties:
       email:
@@ -164,6 +178,40 @@ paths:
               type: string
             type: object
       summary: Get a user by email
+      tags:
+      - users
+  /api/users/register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a user with name, email, and password
+      parameters:
+      - description: User registration payload
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requests.RegisterUserRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.UserResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new user
       tags:
       - users
 swagger: "2.0"

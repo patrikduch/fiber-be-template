@@ -17,16 +17,45 @@ func (User) Fields() []ent.Field {
         field.UUID("id", uuid.UUID{}).
             Default(uuid.New).
             Immutable().
-            StorageKey("Id"), // Maps to "Id" column
-            
+            StorageKey("Id"),
+
         field.String("username").
             NotEmpty().
-            StorageKey("UserName"), // Maps to "UserName" column
-            
+            StorageKey("UserName"),
+
         field.String("email").
             Unique().
             NotEmpty().
-            StorageKey("Email"), // Maps to "Email" column
+            StorageKey("Email"),
+
+        field.String("normalized_email").
+            NotEmpty().
+            StorageKey("NormalizedEmail"),
+
+        field.String("password_hash").
+            Sensitive().
+            NotEmpty().
+            StorageKey("PasswordHash"),
+
+        field.Bool("email_confirmed").
+            Default(false).
+            StorageKey("EmailConfirmed"),
+
+        field.Bool("phone_number_confirmed").
+            Default(false).
+            StorageKey("PhoneNumberConfirmed"),
+
+        field.Bool("two_factor_enabled").
+            Default(false).
+            StorageKey("TwoFactorEnabled"),
+
+        field.Bool("lockout_enabled").
+            Default(false).
+            StorageKey("LockoutEnabled"),
+
+        field.Int("access_failed_count").
+            Default(0).
+            StorageKey("AccessFailedCount"),
     }
 }
 

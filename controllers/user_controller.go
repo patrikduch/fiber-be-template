@@ -8,6 +8,7 @@ import (
     "fiber-be-template/queries/get_all_users"
     "fiber-be-template/queries/get_user_by_email"
     "fiber-be-template/services/users"
+    "fiber-be-template/commands/users/register_user"
 )
 
 var getAllUsersHandler = get_all_users.NewHandler()
@@ -107,6 +108,33 @@ func CreateUser(c *fiber.Ctx) error {
     }
 
     user, err := users.CreateUser(req)
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+    }
+
+    return c.Status(201).JSON(user)
+}
+
+
+// RegisterUser godoc
+// @Summary Register a new user
+// @Description Creates a user with name, email, and password
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body requests.RegisterUserRequestDto true "User registration payload"
+// @Success 201 {object} responses.UserResponseDto
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/users/register [post]
+func RegisterUser(c *fiber.Ctx) error {
+    var registerUserHandler = register_user.NewHandler()
+    var req requests.RegisterUserRequestDto
+    if err := c.BodyParser(&req); err != nil {
+        return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+    }
+
+    user, err := registerUserHandler.Handle(context.Background(), register_user.Command{Payload: req})
     if err != nil {
         return c.Status(500).JSON(fiber.Map{"error": err.Error()})
     }

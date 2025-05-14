@@ -20,8 +20,22 @@ type User struct {
 	// Username holds the value of the "username" field.
 	Username string `json:"username,omitempty"`
 	// Email holds the value of the "email" field.
-	Email        string `json:"email,omitempty"`
-	selectValues sql.SelectValues
+	Email string `json:"email,omitempty"`
+	// NormalizedEmail holds the value of the "normalized_email" field.
+	NormalizedEmail string `json:"normalized_email,omitempty"`
+	// PasswordHash holds the value of the "password_hash" field.
+	PasswordHash string `json:"-"`
+	// EmailConfirmed holds the value of the "email_confirmed" field.
+	EmailConfirmed bool `json:"email_confirmed,omitempty"`
+	// PhoneNumberConfirmed holds the value of the "phone_number_confirmed" field.
+	PhoneNumberConfirmed bool `json:"phone_number_confirmed,omitempty"`
+	// TwoFactorEnabled holds the value of the "two_factor_enabled" field.
+	TwoFactorEnabled bool `json:"two_factor_enabled,omitempty"`
+	// LockoutEnabled holds the value of the "lockout_enabled" field.
+	LockoutEnabled bool `json:"lockout_enabled,omitempty"`
+	// AccessFailedCount holds the value of the "access_failed_count" field.
+	AccessFailedCount int `json:"access_failed_count,omitempty"`
+	selectValues      sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -29,7 +43,11 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldUsername, user.FieldEmail:
+		case user.FieldEmailConfirmed, user.FieldPhoneNumberConfirmed, user.FieldTwoFactorEnabled, user.FieldLockoutEnabled:
+			values[i] = new(sql.NullBool)
+		case user.FieldAccessFailedCount:
+			values[i] = new(sql.NullInt64)
+		case user.FieldUsername, user.FieldEmail, user.FieldNormalizedEmail, user.FieldPasswordHash:
 			values[i] = new(sql.NullString)
 		case user.FieldID:
 			values[i] = new(uuid.UUID)
@@ -65,6 +83,48 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
 				u.Email = value.String
+			}
+		case user.FieldNormalizedEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field normalized_email", values[i])
+			} else if value.Valid {
+				u.NormalizedEmail = value.String
+			}
+		case user.FieldPasswordHash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field password_hash", values[i])
+			} else if value.Valid {
+				u.PasswordHash = value.String
+			}
+		case user.FieldEmailConfirmed:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field email_confirmed", values[i])
+			} else if value.Valid {
+				u.EmailConfirmed = value.Bool
+			}
+		case user.FieldPhoneNumberConfirmed:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field phone_number_confirmed", values[i])
+			} else if value.Valid {
+				u.PhoneNumberConfirmed = value.Bool
+			}
+		case user.FieldTwoFactorEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field two_factor_enabled", values[i])
+			} else if value.Valid {
+				u.TwoFactorEnabled = value.Bool
+			}
+		case user.FieldLockoutEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field lockout_enabled", values[i])
+			} else if value.Valid {
+				u.LockoutEnabled = value.Bool
+			}
+		case user.FieldAccessFailedCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field access_failed_count", values[i])
+			} else if value.Valid {
+				u.AccessFailedCount = int(value.Int64)
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -107,6 +167,26 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(u.Email)
+	builder.WriteString(", ")
+	builder.WriteString("normalized_email=")
+	builder.WriteString(u.NormalizedEmail)
+	builder.WriteString(", ")
+	builder.WriteString("password_hash=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("email_confirmed=")
+	builder.WriteString(fmt.Sprintf("%v", u.EmailConfirmed))
+	builder.WriteString(", ")
+	builder.WriteString("phone_number_confirmed=")
+	builder.WriteString(fmt.Sprintf("%v", u.PhoneNumberConfirmed))
+	builder.WriteString(", ")
+	builder.WriteString("two_factor_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", u.TwoFactorEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("lockout_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", u.LockoutEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("access_failed_count=")
+	builder.WriteString(fmt.Sprintf("%v", u.AccessFailedCount))
 	builder.WriteByte(')')
 	return builder.String()
 }

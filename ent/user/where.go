@@ -64,6 +64,41 @@ func Email(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldEmail, v))
 }
 
+// NormalizedEmail applies equality check predicate on the "normalized_email" field. It's identical to NormalizedEmailEQ.
+func NormalizedEmail(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldNormalizedEmail, v))
+}
+
+// PasswordHash applies equality check predicate on the "password_hash" field. It's identical to PasswordHashEQ.
+func PasswordHash(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPasswordHash, v))
+}
+
+// EmailConfirmed applies equality check predicate on the "email_confirmed" field. It's identical to EmailConfirmedEQ.
+func EmailConfirmed(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldEmailConfirmed, v))
+}
+
+// PhoneNumberConfirmed applies equality check predicate on the "phone_number_confirmed" field. It's identical to PhoneNumberConfirmedEQ.
+func PhoneNumberConfirmed(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPhoneNumberConfirmed, v))
+}
+
+// TwoFactorEnabled applies equality check predicate on the "two_factor_enabled" field. It's identical to TwoFactorEnabledEQ.
+func TwoFactorEnabled(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldTwoFactorEnabled, v))
+}
+
+// LockoutEnabled applies equality check predicate on the "lockout_enabled" field. It's identical to LockoutEnabledEQ.
+func LockoutEnabled(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldLockoutEnabled, v))
+}
+
+// AccessFailedCount applies equality check predicate on the "access_failed_count" field. It's identical to AccessFailedCountEQ.
+func AccessFailedCount(v int) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldAccessFailedCount, v))
+}
+
 // UsernameEQ applies the EQ predicate on the "username" field.
 func UsernameEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldUsername, v))
@@ -192,6 +227,216 @@ func EmailEqualFold(v string) predicate.User {
 // EmailContainsFold applies the ContainsFold predicate on the "email" field.
 func EmailContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldEmail, v))
+}
+
+// NormalizedEmailEQ applies the EQ predicate on the "normalized_email" field.
+func NormalizedEmailEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailNEQ applies the NEQ predicate on the "normalized_email" field.
+func NormalizedEmailNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailIn applies the In predicate on the "normalized_email" field.
+func NormalizedEmailIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldNormalizedEmail, vs...))
+}
+
+// NormalizedEmailNotIn applies the NotIn predicate on the "normalized_email" field.
+func NormalizedEmailNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldNormalizedEmail, vs...))
+}
+
+// NormalizedEmailGT applies the GT predicate on the "normalized_email" field.
+func NormalizedEmailGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailGTE applies the GTE predicate on the "normalized_email" field.
+func NormalizedEmailGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailLT applies the LT predicate on the "normalized_email" field.
+func NormalizedEmailLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailLTE applies the LTE predicate on the "normalized_email" field.
+func NormalizedEmailLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailContains applies the Contains predicate on the "normalized_email" field.
+func NormalizedEmailContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailHasPrefix applies the HasPrefix predicate on the "normalized_email" field.
+func NormalizedEmailHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailHasSuffix applies the HasSuffix predicate on the "normalized_email" field.
+func NormalizedEmailHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailEqualFold applies the EqualFold predicate on the "normalized_email" field.
+func NormalizedEmailEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldNormalizedEmail, v))
+}
+
+// NormalizedEmailContainsFold applies the ContainsFold predicate on the "normalized_email" field.
+func NormalizedEmailContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldNormalizedEmail, v))
+}
+
+// PasswordHashEQ applies the EQ predicate on the "password_hash" field.
+func PasswordHashEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPasswordHash, v))
+}
+
+// PasswordHashNEQ applies the NEQ predicate on the "password_hash" field.
+func PasswordHashNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldPasswordHash, v))
+}
+
+// PasswordHashIn applies the In predicate on the "password_hash" field.
+func PasswordHashIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldPasswordHash, vs...))
+}
+
+// PasswordHashNotIn applies the NotIn predicate on the "password_hash" field.
+func PasswordHashNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldPasswordHash, vs...))
+}
+
+// PasswordHashGT applies the GT predicate on the "password_hash" field.
+func PasswordHashGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldPasswordHash, v))
+}
+
+// PasswordHashGTE applies the GTE predicate on the "password_hash" field.
+func PasswordHashGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldPasswordHash, v))
+}
+
+// PasswordHashLT applies the LT predicate on the "password_hash" field.
+func PasswordHashLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldPasswordHash, v))
+}
+
+// PasswordHashLTE applies the LTE predicate on the "password_hash" field.
+func PasswordHashLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldPasswordHash, v))
+}
+
+// PasswordHashContains applies the Contains predicate on the "password_hash" field.
+func PasswordHashContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldPasswordHash, v))
+}
+
+// PasswordHashHasPrefix applies the HasPrefix predicate on the "password_hash" field.
+func PasswordHashHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldPasswordHash, v))
+}
+
+// PasswordHashHasSuffix applies the HasSuffix predicate on the "password_hash" field.
+func PasswordHashHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldPasswordHash, v))
+}
+
+// PasswordHashEqualFold applies the EqualFold predicate on the "password_hash" field.
+func PasswordHashEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldPasswordHash, v))
+}
+
+// PasswordHashContainsFold applies the ContainsFold predicate on the "password_hash" field.
+func PasswordHashContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldPasswordHash, v))
+}
+
+// EmailConfirmedEQ applies the EQ predicate on the "email_confirmed" field.
+func EmailConfirmedEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldEmailConfirmed, v))
+}
+
+// EmailConfirmedNEQ applies the NEQ predicate on the "email_confirmed" field.
+func EmailConfirmedNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldEmailConfirmed, v))
+}
+
+// PhoneNumberConfirmedEQ applies the EQ predicate on the "phone_number_confirmed" field.
+func PhoneNumberConfirmedEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPhoneNumberConfirmed, v))
+}
+
+// PhoneNumberConfirmedNEQ applies the NEQ predicate on the "phone_number_confirmed" field.
+func PhoneNumberConfirmedNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldPhoneNumberConfirmed, v))
+}
+
+// TwoFactorEnabledEQ applies the EQ predicate on the "two_factor_enabled" field.
+func TwoFactorEnabledEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldTwoFactorEnabled, v))
+}
+
+// TwoFactorEnabledNEQ applies the NEQ predicate on the "two_factor_enabled" field.
+func TwoFactorEnabledNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldTwoFactorEnabled, v))
+}
+
+// LockoutEnabledEQ applies the EQ predicate on the "lockout_enabled" field.
+func LockoutEnabledEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldLockoutEnabled, v))
+}
+
+// LockoutEnabledNEQ applies the NEQ predicate on the "lockout_enabled" field.
+func LockoutEnabledNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldLockoutEnabled, v))
+}
+
+// AccessFailedCountEQ applies the EQ predicate on the "access_failed_count" field.
+func AccessFailedCountEQ(v int) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldAccessFailedCount, v))
+}
+
+// AccessFailedCountNEQ applies the NEQ predicate on the "access_failed_count" field.
+func AccessFailedCountNEQ(v int) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldAccessFailedCount, v))
+}
+
+// AccessFailedCountIn applies the In predicate on the "access_failed_count" field.
+func AccessFailedCountIn(vs ...int) predicate.User {
+	return predicate.User(sql.FieldIn(FieldAccessFailedCount, vs...))
+}
+
+// AccessFailedCountNotIn applies the NotIn predicate on the "access_failed_count" field.
+func AccessFailedCountNotIn(vs ...int) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldAccessFailedCount, vs...))
+}
+
+// AccessFailedCountGT applies the GT predicate on the "access_failed_count" field.
+func AccessFailedCountGT(v int) predicate.User {
+	return predicate.User(sql.FieldGT(FieldAccessFailedCount, v))
+}
+
+// AccessFailedCountGTE applies the GTE predicate on the "access_failed_count" field.
+func AccessFailedCountGTE(v int) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldAccessFailedCount, v))
+}
+
+// AccessFailedCountLT applies the LT predicate on the "access_failed_count" field.
+func AccessFailedCountLT(v int) predicate.User {
+	return predicate.User(sql.FieldLT(FieldAccessFailedCount, v))
+}
+
+// AccessFailedCountLTE applies the LTE predicate on the "access_failed_count" field.
+func AccessFailedCountLTE(v int) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldAccessFailedCount, v))
 }
 
 // And groups predicates with the AND operator between them.

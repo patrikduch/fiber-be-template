@@ -13,6 +13,13 @@ var (
 		{Name: "Id", Type: field.TypeUUID},
 		{Name: "UserName", Type: field.TypeString},
 		{Name: "Email", Type: field.TypeString, Unique: true},
+		{Name: "NormalizedEmail", Type: field.TypeString},
+		{Name: "PasswordHash", Type: field.TypeString},
+		{Name: "EmailConfirmed", Type: field.TypeBool, Default: false},
+		{Name: "PhoneNumberConfirmed", Type: field.TypeBool, Default: false},
+		{Name: "TwoFactorEnabled", Type: field.TypeBool, Default: false},
+		{Name: "LockoutEnabled", Type: field.TypeBool, Default: false},
+		{Name: "AccessFailedCount", Type: field.TypeInt, Default: 0},
 	}
 	// UserTable holds the schema information for the "User" table.
 	UserTable = &schema.Table{

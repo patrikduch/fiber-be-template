@@ -8,8 +8,18 @@ import (
 func RegisterUserRoutes(app fiber.Router) {
     user := app.Group("/api/users")
 
-    user.Get("/by-email", controllers.GetUserByEmail) // 🔐 Static route FIRST
+    // 📥 User registration (must come before dynamic :id route)
+    user.Post("/register", controllers.RegisterUser)
+
+    // 📧 Get user by email
+    user.Get("/by-email", controllers.GetUserByEmail)
+
+    // 📋 Get all users
     user.Get("/", controllers.GetUsers)
-    user.Get("/:id", controllers.GetUserByID)         // 🔄 Dynamic route LAST
+
+    // 🔍 Get by ID (must be last to avoid route conflicts)
+    user.Get("/:id", controllers.GetUserByID)
+
+    // ➕ Create user manually (if still used)
     user.Post("/", controllers.CreateUser)
 }

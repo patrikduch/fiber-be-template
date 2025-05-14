@@ -16,6 +16,20 @@ const (
 	FieldUsername = "UserName"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "Email"
+	// FieldNormalizedEmail holds the string denoting the normalized_email field in the database.
+	FieldNormalizedEmail = "NormalizedEmail"
+	// FieldPasswordHash holds the string denoting the password_hash field in the database.
+	FieldPasswordHash = "PasswordHash"
+	// FieldEmailConfirmed holds the string denoting the email_confirmed field in the database.
+	FieldEmailConfirmed = "EmailConfirmed"
+	// FieldPhoneNumberConfirmed holds the string denoting the phone_number_confirmed field in the database.
+	FieldPhoneNumberConfirmed = "PhoneNumberConfirmed"
+	// FieldTwoFactorEnabled holds the string denoting the two_factor_enabled field in the database.
+	FieldTwoFactorEnabled = "TwoFactorEnabled"
+	// FieldLockoutEnabled holds the string denoting the lockout_enabled field in the database.
+	FieldLockoutEnabled = "LockoutEnabled"
+	// FieldAccessFailedCount holds the string denoting the access_failed_count field in the database.
+	FieldAccessFailedCount = "AccessFailedCount"
 	// Table holds the table name of the user in the database.
 	Table = "User"
 )
@@ -25,6 +39,13 @@ var Columns = []string{
 	FieldID,
 	FieldUsername,
 	FieldEmail,
+	FieldNormalizedEmail,
+	FieldPasswordHash,
+	FieldEmailConfirmed,
+	FieldPhoneNumberConfirmed,
+	FieldTwoFactorEnabled,
+	FieldLockoutEnabled,
+	FieldAccessFailedCount,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -42,6 +63,20 @@ var (
 	UsernameValidator func(string) error
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
+	// NormalizedEmailValidator is a validator for the "normalized_email" field. It is called by the builders before save.
+	NormalizedEmailValidator func(string) error
+	// PasswordHashValidator is a validator for the "password_hash" field. It is called by the builders before save.
+	PasswordHashValidator func(string) error
+	// DefaultEmailConfirmed holds the default value on creation for the "email_confirmed" field.
+	DefaultEmailConfirmed bool
+	// DefaultPhoneNumberConfirmed holds the default value on creation for the "phone_number_confirmed" field.
+	DefaultPhoneNumberConfirmed bool
+	// DefaultTwoFactorEnabled holds the default value on creation for the "two_factor_enabled" field.
+	DefaultTwoFactorEnabled bool
+	// DefaultLockoutEnabled holds the default value on creation for the "lockout_enabled" field.
+	DefaultLockoutEnabled bool
+	// DefaultAccessFailedCount holds the default value on creation for the "access_failed_count" field.
+	DefaultAccessFailedCount int
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -62,4 +97,39 @@ func ByUsername(opts ...sql.OrderTermOption) OrderOption {
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByNormalizedEmail orders the results by the normalized_email field.
+func ByNormalizedEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNormalizedEmail, opts...).ToFunc()
+}
+
+// ByPasswordHash orders the results by the password_hash field.
+func ByPasswordHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasswordHash, opts...).ToFunc()
+}
+
+// ByEmailConfirmed orders the results by the email_confirmed field.
+func ByEmailConfirmed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailConfirmed, opts...).ToFunc()
+}
+
+// ByPhoneNumberConfirmed orders the results by the phone_number_confirmed field.
+func ByPhoneNumberConfirmed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhoneNumberConfirmed, opts...).ToFunc()
+}
+
+// ByTwoFactorEnabled orders the results by the two_factor_enabled field.
+func ByTwoFactorEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTwoFactorEnabled, opts...).ToFunc()
+}
+
+// ByLockoutEnabled orders the results by the lockout_enabled field.
+func ByLockoutEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLockoutEnabled, opts...).ToFunc()
+}
+
+// ByAccessFailedCount orders the results by the access_failed_count field.
+func ByAccessFailedCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccessFailedCount, opts...).ToFunc()
 }

@@ -55,6 +55,111 @@ func (uu *UserUpdate) SetNillableEmail(s *string) *UserUpdate {
 	return uu
 }
 
+// SetNormalizedEmail sets the "normalized_email" field.
+func (uu *UserUpdate) SetNormalizedEmail(s string) *UserUpdate {
+	uu.mutation.SetNormalizedEmail(s)
+	return uu
+}
+
+// SetNillableNormalizedEmail sets the "normalized_email" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableNormalizedEmail(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetNormalizedEmail(*s)
+	}
+	return uu
+}
+
+// SetPasswordHash sets the "password_hash" field.
+func (uu *UserUpdate) SetPasswordHash(s string) *UserUpdate {
+	uu.mutation.SetPasswordHash(s)
+	return uu
+}
+
+// SetNillablePasswordHash sets the "password_hash" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePasswordHash(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetPasswordHash(*s)
+	}
+	return uu
+}
+
+// SetEmailConfirmed sets the "email_confirmed" field.
+func (uu *UserUpdate) SetEmailConfirmed(b bool) *UserUpdate {
+	uu.mutation.SetEmailConfirmed(b)
+	return uu
+}
+
+// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableEmailConfirmed(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetEmailConfirmed(*b)
+	}
+	return uu
+}
+
+// SetPhoneNumberConfirmed sets the "phone_number_confirmed" field.
+func (uu *UserUpdate) SetPhoneNumberConfirmed(b bool) *UserUpdate {
+	uu.mutation.SetPhoneNumberConfirmed(b)
+	return uu
+}
+
+// SetNillablePhoneNumberConfirmed sets the "phone_number_confirmed" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePhoneNumberConfirmed(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetPhoneNumberConfirmed(*b)
+	}
+	return uu
+}
+
+// SetTwoFactorEnabled sets the "two_factor_enabled" field.
+func (uu *UserUpdate) SetTwoFactorEnabled(b bool) *UserUpdate {
+	uu.mutation.SetTwoFactorEnabled(b)
+	return uu
+}
+
+// SetNillableTwoFactorEnabled sets the "two_factor_enabled" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableTwoFactorEnabled(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetTwoFactorEnabled(*b)
+	}
+	return uu
+}
+
+// SetLockoutEnabled sets the "lockout_enabled" field.
+func (uu *UserUpdate) SetLockoutEnabled(b bool) *UserUpdate {
+	uu.mutation.SetLockoutEnabled(b)
+	return uu
+}
+
+// SetNillableLockoutEnabled sets the "lockout_enabled" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableLockoutEnabled(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetLockoutEnabled(*b)
+	}
+	return uu
+}
+
+// SetAccessFailedCount sets the "access_failed_count" field.
+func (uu *UserUpdate) SetAccessFailedCount(i int) *UserUpdate {
+	uu.mutation.ResetAccessFailedCount()
+	uu.mutation.SetAccessFailedCount(i)
+	return uu
+}
+
+// SetNillableAccessFailedCount sets the "access_failed_count" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableAccessFailedCount(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetAccessFailedCount(*i)
+	}
+	return uu
+}
+
+// AddAccessFailedCount adds i to the "access_failed_count" field.
+func (uu *UserUpdate) AddAccessFailedCount(i int) *UserUpdate {
+	uu.mutation.AddAccessFailedCount(i)
+	return uu
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -99,6 +204,16 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
 		}
 	}
+	if v, ok := uu.mutation.NormalizedEmail(); ok {
+		if err := user.NormalizedEmailValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_email", err: fmt.Errorf(`ent: validator failed for field "User.normalized_email": %w`, err)}
+		}
+	}
+	if v, ok := uu.mutation.PasswordHash(); ok {
+		if err := user.PasswordHashValidator(v); err != nil {
+			return &ValidationError{Name: "password_hash", err: fmt.Errorf(`ent: validator failed for field "User.password_hash": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -119,6 +234,30 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.NormalizedEmail(); ok {
+		_spec.SetField(user.FieldNormalizedEmail, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.PasswordHash(); ok {
+		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.EmailConfirmed(); ok {
+		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+	}
+	if value, ok := uu.mutation.PhoneNumberConfirmed(); ok {
+		_spec.SetField(user.FieldPhoneNumberConfirmed, field.TypeBool, value)
+	}
+	if value, ok := uu.mutation.TwoFactorEnabled(); ok {
+		_spec.SetField(user.FieldTwoFactorEnabled, field.TypeBool, value)
+	}
+	if value, ok := uu.mutation.LockoutEnabled(); ok {
+		_spec.SetField(user.FieldLockoutEnabled, field.TypeBool, value)
+	}
+	if value, ok := uu.mutation.AccessFailedCount(); ok {
+		_spec.SetField(user.FieldAccessFailedCount, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.AddedAccessFailedCount(); ok {
+		_spec.AddField(user.FieldAccessFailedCount, field.TypeInt, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -165,6 +304,111 @@ func (uuo *UserUpdateOne) SetNillableEmail(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetEmail(*s)
 	}
+	return uuo
+}
+
+// SetNormalizedEmail sets the "normalized_email" field.
+func (uuo *UserUpdateOne) SetNormalizedEmail(s string) *UserUpdateOne {
+	uuo.mutation.SetNormalizedEmail(s)
+	return uuo
+}
+
+// SetNillableNormalizedEmail sets the "normalized_email" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableNormalizedEmail(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetNormalizedEmail(*s)
+	}
+	return uuo
+}
+
+// SetPasswordHash sets the "password_hash" field.
+func (uuo *UserUpdateOne) SetPasswordHash(s string) *UserUpdateOne {
+	uuo.mutation.SetPasswordHash(s)
+	return uuo
+}
+
+// SetNillablePasswordHash sets the "password_hash" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePasswordHash(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetPasswordHash(*s)
+	}
+	return uuo
+}
+
+// SetEmailConfirmed sets the "email_confirmed" field.
+func (uuo *UserUpdateOne) SetEmailConfirmed(b bool) *UserUpdateOne {
+	uuo.mutation.SetEmailConfirmed(b)
+	return uuo
+}
+
+// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableEmailConfirmed(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetEmailConfirmed(*b)
+	}
+	return uuo
+}
+
+// SetPhoneNumberConfirmed sets the "phone_number_confirmed" field.
+func (uuo *UserUpdateOne) SetPhoneNumberConfirmed(b bool) *UserUpdateOne {
+	uuo.mutation.SetPhoneNumberConfirmed(b)
+	return uuo
+}
+
+// SetNillablePhoneNumberConfirmed sets the "phone_number_confirmed" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePhoneNumberConfirmed(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetPhoneNumberConfirmed(*b)
+	}
+	return uuo
+}
+
+// SetTwoFactorEnabled sets the "two_factor_enabled" field.
+func (uuo *UserUpdateOne) SetTwoFactorEnabled(b bool) *UserUpdateOne {
+	uuo.mutation.SetTwoFactorEnabled(b)
+	return uuo
+}
+
+// SetNillableTwoFactorEnabled sets the "two_factor_enabled" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableTwoFactorEnabled(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetTwoFactorEnabled(*b)
+	}
+	return uuo
+}
+
+// SetLockoutEnabled sets the "lockout_enabled" field.
+func (uuo *UserUpdateOne) SetLockoutEnabled(b bool) *UserUpdateOne {
+	uuo.mutation.SetLockoutEnabled(b)
+	return uuo
+}
+
+// SetNillableLockoutEnabled sets the "lockout_enabled" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableLockoutEnabled(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetLockoutEnabled(*b)
+	}
+	return uuo
+}
+
+// SetAccessFailedCount sets the "access_failed_count" field.
+func (uuo *UserUpdateOne) SetAccessFailedCount(i int) *UserUpdateOne {
+	uuo.mutation.ResetAccessFailedCount()
+	uuo.mutation.SetAccessFailedCount(i)
+	return uuo
+}
+
+// SetNillableAccessFailedCount sets the "access_failed_count" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableAccessFailedCount(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetAccessFailedCount(*i)
+	}
+	return uuo
+}
+
+// AddAccessFailedCount adds i to the "access_failed_count" field.
+func (uuo *UserUpdateOne) AddAccessFailedCount(i int) *UserUpdateOne {
+	uuo.mutation.AddAccessFailedCount(i)
 	return uuo
 }
 
@@ -225,6 +469,16 @@ func (uuo *UserUpdateOne) check() error {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
 		}
 	}
+	if v, ok := uuo.mutation.NormalizedEmail(); ok {
+		if err := user.NormalizedEmailValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_email", err: fmt.Errorf(`ent: validator failed for field "User.normalized_email": %w`, err)}
+		}
+	}
+	if v, ok := uuo.mutation.PasswordHash(); ok {
+		if err := user.PasswordHashValidator(v); err != nil {
+			return &ValidationError{Name: "password_hash", err: fmt.Errorf(`ent: validator failed for field "User.password_hash": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -262,6 +516,30 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.NormalizedEmail(); ok {
+		_spec.SetField(user.FieldNormalizedEmail, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.PasswordHash(); ok {
+		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.EmailConfirmed(); ok {
+		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+	}
+	if value, ok := uuo.mutation.PhoneNumberConfirmed(); ok {
+		_spec.SetField(user.FieldPhoneNumberConfirmed, field.TypeBool, value)
+	}
+	if value, ok := uuo.mutation.TwoFactorEnabled(); ok {
+		_spec.SetField(user.FieldTwoFactorEnabled, field.TypeBool, value)
+	}
+	if value, ok := uuo.mutation.LockoutEnabled(); ok {
+		_spec.SetField(user.FieldLockoutEnabled, field.TypeBool, value)
+	}
+	if value, ok := uuo.mutation.AccessFailedCount(); ok {
+		_spec.SetField(user.FieldAccessFailedCount, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.AddedAccessFailedCount(); ok {
+		_spec.AddField(user.FieldAccessFailedCount, field.TypeInt, value)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

@@ -32,6 +32,88 @@ func (uc *UserCreate) SetEmail(s string) *UserCreate {
 	return uc
 }
 
+// SetNormalizedEmail sets the "normalized_email" field.
+func (uc *UserCreate) SetNormalizedEmail(s string) *UserCreate {
+	uc.mutation.SetNormalizedEmail(s)
+	return uc
+}
+
+// SetPasswordHash sets the "password_hash" field.
+func (uc *UserCreate) SetPasswordHash(s string) *UserCreate {
+	uc.mutation.SetPasswordHash(s)
+	return uc
+}
+
+// SetEmailConfirmed sets the "email_confirmed" field.
+func (uc *UserCreate) SetEmailConfirmed(b bool) *UserCreate {
+	uc.mutation.SetEmailConfirmed(b)
+	return uc
+}
+
+// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
+func (uc *UserCreate) SetNillableEmailConfirmed(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetEmailConfirmed(*b)
+	}
+	return uc
+}
+
+// SetPhoneNumberConfirmed sets the "phone_number_confirmed" field.
+func (uc *UserCreate) SetPhoneNumberConfirmed(b bool) *UserCreate {
+	uc.mutation.SetPhoneNumberConfirmed(b)
+	return uc
+}
+
+// SetNillablePhoneNumberConfirmed sets the "phone_number_confirmed" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePhoneNumberConfirmed(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetPhoneNumberConfirmed(*b)
+	}
+	return uc
+}
+
+// SetTwoFactorEnabled sets the "two_factor_enabled" field.
+func (uc *UserCreate) SetTwoFactorEnabled(b bool) *UserCreate {
+	uc.mutation.SetTwoFactorEnabled(b)
+	return uc
+}
+
+// SetNillableTwoFactorEnabled sets the "two_factor_enabled" field if the given value is not nil.
+func (uc *UserCreate) SetNillableTwoFactorEnabled(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetTwoFactorEnabled(*b)
+	}
+	return uc
+}
+
+// SetLockoutEnabled sets the "lockout_enabled" field.
+func (uc *UserCreate) SetLockoutEnabled(b bool) *UserCreate {
+	uc.mutation.SetLockoutEnabled(b)
+	return uc
+}
+
+// SetNillableLockoutEnabled sets the "lockout_enabled" field if the given value is not nil.
+func (uc *UserCreate) SetNillableLockoutEnabled(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetLockoutEnabled(*b)
+	}
+	return uc
+}
+
+// SetAccessFailedCount sets the "access_failed_count" field.
+func (uc *UserCreate) SetAccessFailedCount(i int) *UserCreate {
+	uc.mutation.SetAccessFailedCount(i)
+	return uc
+}
+
+// SetNillableAccessFailedCount sets the "access_failed_count" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAccessFailedCount(i *int) *UserCreate {
+	if i != nil {
+		uc.SetAccessFailedCount(*i)
+	}
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(u uuid.UUID) *UserCreate {
 	uc.mutation.SetID(u)
@@ -81,6 +163,26 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.EmailConfirmed(); !ok {
+		v := user.DefaultEmailConfirmed
+		uc.mutation.SetEmailConfirmed(v)
+	}
+	if _, ok := uc.mutation.PhoneNumberConfirmed(); !ok {
+		v := user.DefaultPhoneNumberConfirmed
+		uc.mutation.SetPhoneNumberConfirmed(v)
+	}
+	if _, ok := uc.mutation.TwoFactorEnabled(); !ok {
+		v := user.DefaultTwoFactorEnabled
+		uc.mutation.SetTwoFactorEnabled(v)
+	}
+	if _, ok := uc.mutation.LockoutEnabled(); !ok {
+		v := user.DefaultLockoutEnabled
+		uc.mutation.SetLockoutEnabled(v)
+	}
+	if _, ok := uc.mutation.AccessFailedCount(); !ok {
+		v := user.DefaultAccessFailedCount
+		uc.mutation.SetAccessFailedCount(v)
+	}
 	if _, ok := uc.mutation.ID(); !ok {
 		v := user.DefaultID()
 		uc.mutation.SetID(v)
@@ -104,6 +206,37 @@ func (uc *UserCreate) check() error {
 		if err := user.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
 		}
+	}
+	if _, ok := uc.mutation.NormalizedEmail(); !ok {
+		return &ValidationError{Name: "normalized_email", err: errors.New(`ent: missing required field "User.normalized_email"`)}
+	}
+	if v, ok := uc.mutation.NormalizedEmail(); ok {
+		if err := user.NormalizedEmailValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_email", err: fmt.Errorf(`ent: validator failed for field "User.normalized_email": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.PasswordHash(); !ok {
+		return &ValidationError{Name: "password_hash", err: errors.New(`ent: missing required field "User.password_hash"`)}
+	}
+	if v, ok := uc.mutation.PasswordHash(); ok {
+		if err := user.PasswordHashValidator(v); err != nil {
+			return &ValidationError{Name: "password_hash", err: fmt.Errorf(`ent: validator failed for field "User.password_hash": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.EmailConfirmed(); !ok {
+		return &ValidationError{Name: "email_confirmed", err: errors.New(`ent: missing required field "User.email_confirmed"`)}
+	}
+	if _, ok := uc.mutation.PhoneNumberConfirmed(); !ok {
+		return &ValidationError{Name: "phone_number_confirmed", err: errors.New(`ent: missing required field "User.phone_number_confirmed"`)}
+	}
+	if _, ok := uc.mutation.TwoFactorEnabled(); !ok {
+		return &ValidationError{Name: "two_factor_enabled", err: errors.New(`ent: missing required field "User.two_factor_enabled"`)}
+	}
+	if _, ok := uc.mutation.LockoutEnabled(); !ok {
+		return &ValidationError{Name: "lockout_enabled", err: errors.New(`ent: missing required field "User.lockout_enabled"`)}
+	}
+	if _, ok := uc.mutation.AccessFailedCount(); !ok {
+		return &ValidationError{Name: "access_failed_count", err: errors.New(`ent: missing required field "User.access_failed_count"`)}
 	}
 	return nil
 }
@@ -147,6 +280,34 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 		_node.Email = value
+	}
+	if value, ok := uc.mutation.NormalizedEmail(); ok {
+		_spec.SetField(user.FieldNormalizedEmail, field.TypeString, value)
+		_node.NormalizedEmail = value
+	}
+	if value, ok := uc.mutation.PasswordHash(); ok {
+		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
+		_node.PasswordHash = value
+	}
+	if value, ok := uc.mutation.EmailConfirmed(); ok {
+		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+		_node.EmailConfirmed = value
+	}
+	if value, ok := uc.mutation.PhoneNumberConfirmed(); ok {
+		_spec.SetField(user.FieldPhoneNumberConfirmed, field.TypeBool, value)
+		_node.PhoneNumberConfirmed = value
+	}
+	if value, ok := uc.mutation.TwoFactorEnabled(); ok {
+		_spec.SetField(user.FieldTwoFactorEnabled, field.TypeBool, value)
+		_node.TwoFactorEnabled = value
+	}
+	if value, ok := uc.mutation.LockoutEnabled(); ok {
+		_spec.SetField(user.FieldLockoutEnabled, field.TypeBool, value)
+		_node.LockoutEnabled = value
+	}
+	if value, ok := uc.mutation.AccessFailedCount(); ok {
+		_spec.SetField(user.FieldAccessFailedCount, field.TypeInt, value)
+		_node.AccessFailedCount = value
 	}
 	return _node, _spec
 }

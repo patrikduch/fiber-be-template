@@ -30,15 +30,23 @@ const (
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *uuid.UUID
-	username      *string
-	email         *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*User, error)
-	predicates    []predicate.User
+	op                     Op
+	typ                    string
+	id                     *uuid.UUID
+	username               *string
+	email                  *string
+	normalized_email       *string
+	password_hash          *string
+	email_confirmed        *bool
+	phone_number_confirmed *bool
+	two_factor_enabled     *bool
+	lockout_enabled        *bool
+	access_failed_count    *int
+	addaccess_failed_count *int
+	clearedFields          map[string]struct{}
+	done                   bool
+	oldValue               func(context.Context) (*User, error)
+	predicates             []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -217,6 +225,278 @@ func (m *UserMutation) ResetEmail() {
 	m.email = nil
 }
 
+// SetNormalizedEmail sets the "normalized_email" field.
+func (m *UserMutation) SetNormalizedEmail(s string) {
+	m.normalized_email = &s
+}
+
+// NormalizedEmail returns the value of the "normalized_email" field in the mutation.
+func (m *UserMutation) NormalizedEmail() (r string, exists bool) {
+	v := m.normalized_email
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNormalizedEmail returns the old "normalized_email" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldNormalizedEmail(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNormalizedEmail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNormalizedEmail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNormalizedEmail: %w", err)
+	}
+	return oldValue.NormalizedEmail, nil
+}
+
+// ResetNormalizedEmail resets all changes to the "normalized_email" field.
+func (m *UserMutation) ResetNormalizedEmail() {
+	m.normalized_email = nil
+}
+
+// SetPasswordHash sets the "password_hash" field.
+func (m *UserMutation) SetPasswordHash(s string) {
+	m.password_hash = &s
+}
+
+// PasswordHash returns the value of the "password_hash" field in the mutation.
+func (m *UserMutation) PasswordHash() (r string, exists bool) {
+	v := m.password_hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPasswordHash returns the old "password_hash" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldPasswordHash(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPasswordHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPasswordHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPasswordHash: %w", err)
+	}
+	return oldValue.PasswordHash, nil
+}
+
+// ResetPasswordHash resets all changes to the "password_hash" field.
+func (m *UserMutation) ResetPasswordHash() {
+	m.password_hash = nil
+}
+
+// SetEmailConfirmed sets the "email_confirmed" field.
+func (m *UserMutation) SetEmailConfirmed(b bool) {
+	m.email_confirmed = &b
+}
+
+// EmailConfirmed returns the value of the "email_confirmed" field in the mutation.
+func (m *UserMutation) EmailConfirmed() (r bool, exists bool) {
+	v := m.email_confirmed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailConfirmed returns the old "email_confirmed" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldEmailConfirmed(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailConfirmed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailConfirmed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailConfirmed: %w", err)
+	}
+	return oldValue.EmailConfirmed, nil
+}
+
+// ResetEmailConfirmed resets all changes to the "email_confirmed" field.
+func (m *UserMutation) ResetEmailConfirmed() {
+	m.email_confirmed = nil
+}
+
+// SetPhoneNumberConfirmed sets the "phone_number_confirmed" field.
+func (m *UserMutation) SetPhoneNumberConfirmed(b bool) {
+	m.phone_number_confirmed = &b
+}
+
+// PhoneNumberConfirmed returns the value of the "phone_number_confirmed" field in the mutation.
+func (m *UserMutation) PhoneNumberConfirmed() (r bool, exists bool) {
+	v := m.phone_number_confirmed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhoneNumberConfirmed returns the old "phone_number_confirmed" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldPhoneNumberConfirmed(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhoneNumberConfirmed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhoneNumberConfirmed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhoneNumberConfirmed: %w", err)
+	}
+	return oldValue.PhoneNumberConfirmed, nil
+}
+
+// ResetPhoneNumberConfirmed resets all changes to the "phone_number_confirmed" field.
+func (m *UserMutation) ResetPhoneNumberConfirmed() {
+	m.phone_number_confirmed = nil
+}
+
+// SetTwoFactorEnabled sets the "two_factor_enabled" field.
+func (m *UserMutation) SetTwoFactorEnabled(b bool) {
+	m.two_factor_enabled = &b
+}
+
+// TwoFactorEnabled returns the value of the "two_factor_enabled" field in the mutation.
+func (m *UserMutation) TwoFactorEnabled() (r bool, exists bool) {
+	v := m.two_factor_enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTwoFactorEnabled returns the old "two_factor_enabled" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldTwoFactorEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTwoFactorEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTwoFactorEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTwoFactorEnabled: %w", err)
+	}
+	return oldValue.TwoFactorEnabled, nil
+}
+
+// ResetTwoFactorEnabled resets all changes to the "two_factor_enabled" field.
+func (m *UserMutation) ResetTwoFactorEnabled() {
+	m.two_factor_enabled = nil
+}
+
+// SetLockoutEnabled sets the "lockout_enabled" field.
+func (m *UserMutation) SetLockoutEnabled(b bool) {
+	m.lockout_enabled = &b
+}
+
+// LockoutEnabled returns the value of the "lockout_enabled" field in the mutation.
+func (m *UserMutation) LockoutEnabled() (r bool, exists bool) {
+	v := m.lockout_enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLockoutEnabled returns the old "lockout_enabled" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldLockoutEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLockoutEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLockoutEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLockoutEnabled: %w", err)
+	}
+	return oldValue.LockoutEnabled, nil
+}
+
+// ResetLockoutEnabled resets all changes to the "lockout_enabled" field.
+func (m *UserMutation) ResetLockoutEnabled() {
+	m.lockout_enabled = nil
+}
+
+// SetAccessFailedCount sets the "access_failed_count" field.
+func (m *UserMutation) SetAccessFailedCount(i int) {
+	m.access_failed_count = &i
+	m.addaccess_failed_count = nil
+}
+
+// AccessFailedCount returns the value of the "access_failed_count" field in the mutation.
+func (m *UserMutation) AccessFailedCount() (r int, exists bool) {
+	v := m.access_failed_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAccessFailedCount returns the old "access_failed_count" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldAccessFailedCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAccessFailedCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAccessFailedCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAccessFailedCount: %w", err)
+	}
+	return oldValue.AccessFailedCount, nil
+}
+
+// AddAccessFailedCount adds i to the "access_failed_count" field.
+func (m *UserMutation) AddAccessFailedCount(i int) {
+	if m.addaccess_failed_count != nil {
+		*m.addaccess_failed_count += i
+	} else {
+		m.addaccess_failed_count = &i
+	}
+}
+
+// AddedAccessFailedCount returns the value that was added to the "access_failed_count" field in this mutation.
+func (m *UserMutation) AddedAccessFailedCount() (r int, exists bool) {
+	v := m.addaccess_failed_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetAccessFailedCount resets all changes to the "access_failed_count" field.
+func (m *UserMutation) ResetAccessFailedCount() {
+	m.access_failed_count = nil
+	m.addaccess_failed_count = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -251,12 +531,33 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 9)
 	if m.username != nil {
 		fields = append(fields, user.FieldUsername)
 	}
 	if m.email != nil {
 		fields = append(fields, user.FieldEmail)
+	}
+	if m.normalized_email != nil {
+		fields = append(fields, user.FieldNormalizedEmail)
+	}
+	if m.password_hash != nil {
+		fields = append(fields, user.FieldPasswordHash)
+	}
+	if m.email_confirmed != nil {
+		fields = append(fields, user.FieldEmailConfirmed)
+	}
+	if m.phone_number_confirmed != nil {
+		fields = append(fields, user.FieldPhoneNumberConfirmed)
+	}
+	if m.two_factor_enabled != nil {
+		fields = append(fields, user.FieldTwoFactorEnabled)
+	}
+	if m.lockout_enabled != nil {
+		fields = append(fields, user.FieldLockoutEnabled)
+	}
+	if m.access_failed_count != nil {
+		fields = append(fields, user.FieldAccessFailedCount)
 	}
 	return fields
 }
@@ -270,6 +571,20 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Username()
 	case user.FieldEmail:
 		return m.Email()
+	case user.FieldNormalizedEmail:
+		return m.NormalizedEmail()
+	case user.FieldPasswordHash:
+		return m.PasswordHash()
+	case user.FieldEmailConfirmed:
+		return m.EmailConfirmed()
+	case user.FieldPhoneNumberConfirmed:
+		return m.PhoneNumberConfirmed()
+	case user.FieldTwoFactorEnabled:
+		return m.TwoFactorEnabled()
+	case user.FieldLockoutEnabled:
+		return m.LockoutEnabled()
+	case user.FieldAccessFailedCount:
+		return m.AccessFailedCount()
 	}
 	return nil, false
 }
@@ -283,6 +598,20 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUsername(ctx)
 	case user.FieldEmail:
 		return m.OldEmail(ctx)
+	case user.FieldNormalizedEmail:
+		return m.OldNormalizedEmail(ctx)
+	case user.FieldPasswordHash:
+		return m.OldPasswordHash(ctx)
+	case user.FieldEmailConfirmed:
+		return m.OldEmailConfirmed(ctx)
+	case user.FieldPhoneNumberConfirmed:
+		return m.OldPhoneNumberConfirmed(ctx)
+	case user.FieldTwoFactorEnabled:
+		return m.OldTwoFactorEnabled(ctx)
+	case user.FieldLockoutEnabled:
+		return m.OldLockoutEnabled(ctx)
+	case user.FieldAccessFailedCount:
+		return m.OldAccessFailedCount(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -306,6 +635,55 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmail(v)
 		return nil
+	case user.FieldNormalizedEmail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNormalizedEmail(v)
+		return nil
+	case user.FieldPasswordHash:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPasswordHash(v)
+		return nil
+	case user.FieldEmailConfirmed:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailConfirmed(v)
+		return nil
+	case user.FieldPhoneNumberConfirmed:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhoneNumberConfirmed(v)
+		return nil
+	case user.FieldTwoFactorEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTwoFactorEnabled(v)
+		return nil
+	case user.FieldLockoutEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLockoutEnabled(v)
+		return nil
+	case user.FieldAccessFailedCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAccessFailedCount(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
 }
@@ -313,13 +691,21 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *UserMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addaccess_failed_count != nil {
+		fields = append(fields, user.FieldAccessFailedCount)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case user.FieldAccessFailedCount:
+		return m.AddedAccessFailedCount()
+	}
 	return nil, false
 }
 
@@ -328,6 +714,13 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *UserMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case user.FieldAccessFailedCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAccessFailedCount(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User numeric field %s", name)
 }
@@ -360,6 +753,27 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldEmail:
 		m.ResetEmail()
+		return nil
+	case user.FieldNormalizedEmail:
+		m.ResetNormalizedEmail()
+		return nil
+	case user.FieldPasswordHash:
+		m.ResetPasswordHash()
+		return nil
+	case user.FieldEmailConfirmed:
+		m.ResetEmailConfirmed()
+		return nil
+	case user.FieldPhoneNumberConfirmed:
+		m.ResetPhoneNumberConfirmed()
+		return nil
+	case user.FieldTwoFactorEnabled:
+		m.ResetTwoFactorEnabled()
+		return nil
+	case user.FieldLockoutEnabled:
+		m.ResetLockoutEnabled()
+		return nil
+	case user.FieldAccessFailedCount:
+		m.ResetAccessFailedCount()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
