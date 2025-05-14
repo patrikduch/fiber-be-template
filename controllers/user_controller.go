@@ -1,13 +1,16 @@
 package controllers
 
 import (
-
+    "context"
 
     "github.com/gofiber/fiber/v2"
     "fiber-be-template/dtos/users/requests"
+    "fiber-be-template/queries/get_all_users"
     "fiber-be-template/services/users"
-
 )
+
+// Initialize the CQRS handler
+var getAllUsersHandler = get_all_users.NewHandler()
 
 // GetUsers godoc
 // @Summary Get all users
@@ -17,7 +20,7 @@ import (
 // @Success 200 {array} responses.UserResponseDto
 // @Router /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
-    result, err := users.GetAllUsers()
+    result, err := getAllUsersHandler.Handle(context.Background(), get_all_users.Query{})
     if err != nil {
         return c.Status(500).JSON(fiber.Map{"error": err.Error()})
     }
