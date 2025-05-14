@@ -3,10 +3,14 @@ package routes
 import (
     "github.com/gofiber/fiber/v2"
     "fiber-be-template/controllers"
+    jwtmiddleware "fiber-be-template/middlewares/jwt"
 )
 
 func RegisterUserRoutes(app fiber.Router) {
     user := app.Group("/api/users")
+
+    // 🔐 JWT-protected routes
+    user.Use(jwtmiddleware.Protected())
 
     // 📥 User registration (must come before dynamic :id route)
     user.Post("/register", controllers.RegisterUser)

@@ -18,6 +18,7 @@ var getUserByEmailHandler = get_user_by_email.NewHandler()
 // @Summary Get all users
 // @Description Returns list of users
 // @Tags users
+// @Security BearerAuth
 // @Produce json
 // @Success 200 {array} responses.UserResponseDto
 // @Router /api/users [get]
@@ -33,6 +34,7 @@ func GetUsers(c *fiber.Ctx) error {
 // @Summary Get a user by ID
 // @Description Returns a single user based on their UUID
 // @Tags users
+// @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID (UUID format)" format(uuid)
 // @Success 200 {object} responses.UserResponseDto
@@ -62,6 +64,7 @@ func GetUserByID(c *fiber.Ctx) error {
 // @Tags users
 // @Produce json
 // @Param email query string true "User email"
+// @Security BearerAuth
 // @Success 200 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string "Missing or invalid email"
 // @Failure 404 {object} map[string]string "User not found"

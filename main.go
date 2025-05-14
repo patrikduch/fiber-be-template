@@ -1,7 +1,11 @@
-// @title Fiber BE Template API
+// @title Fiber API
 // @version 1.0
-// @description Fiber backend template
-// @BasePath /
+// @description This is a sample API with JWT auth.
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Enter: "Bearer <your JWT token>"
+// @BasePath /api
 package main
 
 import (

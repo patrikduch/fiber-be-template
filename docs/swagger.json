@@ -1,12 +1,11 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Fiber backend template",
-        "title": "Fiber BE Template API",
+        "description": "This is a sample API with JWT auth.",
+        "title": "Fiber API",
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/",
     "paths": {
         "/api/auth/login": {
             "post": {
@@ -103,6 +102,11 @@
         },
         "/api/users": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns list of users",
                 "produces": [
                     "application/json"
@@ -126,6 +130,11 @@
         },
         "/api/users/by-email": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns a single user based on their email",
                 "produces": [
                     "application/json"
@@ -234,6 +243,11 @@
         },
         "/api/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns a single user based on their UUID",
                 "produces": [
                     "application/json"
@@ -329,10 +343,7 @@
         "responses.LoginUserResponseDto": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
+                "accessToken": {
                     "type": "string"
                 }
             }
@@ -350,6 +361,14 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Enter: \"Bearer \u003cyour JWT token\u003e\"",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

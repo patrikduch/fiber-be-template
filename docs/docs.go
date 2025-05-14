@@ -110,6 +110,11 @@ const docTemplate = `{
         },
         "/api/users": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns list of users",
                 "produces": [
                     "application/json"
@@ -133,6 +138,11 @@ const docTemplate = `{
         },
         "/api/users/by-email": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns a single user based on their email",
                 "produces": [
                     "application/json"
@@ -241,6 +251,11 @@ const docTemplate = `{
         },
         "/api/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Returns a single user based on their UUID",
                 "produces": [
                     "application/json"
@@ -336,10 +351,7 @@ const docTemplate = `{
         "responses.LoginUserResponseDto": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
+                "accessToken": {
                     "type": "string"
                 }
             }
@@ -358,6 +370,14 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Enter: \"Bearer \u003cyour JWT token\u003e\"",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -365,10 +385,10 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Fiber BE Template API",
-	Description:      "Fiber backend template",
+	Title:            "Fiber API",
+	Description:      "This is a sample API with JWT auth.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
