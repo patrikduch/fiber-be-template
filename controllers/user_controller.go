@@ -21,7 +21,7 @@ var getUserByEmailHandler = get_user_by_email.NewHandler()
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {array} responses.UserResponseDto
-// @Failure 401 {object} map[string]string "Unauthorized"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Router /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
     result, err := getAllUsersHandler.Handle(context.Background(), get_all_users.Query{})
@@ -40,6 +40,7 @@ func GetUsers(c *fiber.Ctx) error {
 // @Param id path string true "User ID (UUID format)" format(uuid)
 // @Success 200 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string "Invalid UUID format"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 404 {object} map[string]string "User not found"
 // @Failure 500 {object} map[string]string "Internal server error"
 // @Router /api/users/{id} [get]
@@ -68,6 +69,7 @@ func GetUserByID(c *fiber.Ctx) error {
 // @Security BearerAuth
 // @Success 200 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string "Missing or invalid email"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 404 {object} map[string]string "User not found"
 // @Failure 500 {object} map[string]string "Internal server error"
 // @Router /api/users/by-email [get]

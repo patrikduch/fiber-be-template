@@ -19,7 +19,6 @@ var loginUserHandler = login_user.NewHandler()
 // @Param credentials body requests.LoginUserRequestDto true "User credentials"
 // @Success 200 {object} responses.LoginUserResponseDto
 // @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/auth/login [post]
 func LoginUser(c *fiber.Ctx) error {

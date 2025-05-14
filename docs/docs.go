@@ -55,15 +55,6 @@ const docTemplate = `{
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -132,6 +123,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/responses.UserResponseDto"
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.ErrorResponse"
+                        }
                     }
                 }
             }
@@ -174,6 +171,12 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     },
                     "404": {
@@ -290,6 +293,12 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.ErrorResponse"
+                        }
+                    },
                     "404": {
                         "description": "User not found",
                         "schema": {
@@ -313,6 +322,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "common.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                }
+            }
+        },
         "requests.LoginUserRequestDto": {
             "type": "object",
             "required": [

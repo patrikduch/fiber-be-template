@@ -1,4 +1,10 @@
 definitions:
+  common.ErrorResponse:
+    properties:
+      error:
+        example: Unauthorized
+        type: string
+    type: object
   requests.LoginUserRequestDto:
     properties:
       email:
@@ -68,12 +74,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
         "500":
           description: Internal Server Error
           schema:
@@ -116,6 +116,10 @@ paths:
             items:
               $ref: '#/definitions/responses.UserResponseDto'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get all users
@@ -144,6 +148,10 @@ paths:
             additionalProperties:
               type: string
             type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
         "404":
           description: User not found
           schema:
@@ -183,6 +191,10 @@ paths:
             additionalProperties:
               type: string
             type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
         "404":
           description: User not found
           schema:
