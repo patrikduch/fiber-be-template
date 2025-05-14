@@ -105,7 +105,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: User details
+          description: OK
           schema:
             $ref: '#/definitions/responses.UserResponseDto'
         "400":
@@ -127,6 +127,43 @@ paths:
               type: string
             type: object
       summary: Get a user by ID
+      tags:
+      - users
+  /api/users/by-email:
+    get:
+      description: Returns a single user based on their email
+      parameters:
+      - description: User email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponseDto'
+        "400":
+          description: Missing or invalid email
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a user by email
       tags:
       - users
 swagger: "2.0"

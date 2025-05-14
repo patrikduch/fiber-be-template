@@ -6,11 +6,12 @@ import (
     "github.com/gofiber/fiber/v2"
     "fiber-be-template/dtos/users/requests"
     "fiber-be-template/queries/get_all_users"
+    "fiber-be-template/queries/get_user_by_email"
     "fiber-be-template/services/users"
 )
 
-// Initialize the CQRS handler
 var getAllUsersHandler = get_all_users.NewHandler()
+var getUserByEmailHandler = get_user_by_email.NewHandler()
 
 // GetUsers godoc
 // @Summary Get all users
@@ -33,14 +34,47 @@ func GetUsers(c *fiber.Ctx) error {
 // @Tags users
 // @Produce json
 // @Param id path string true "User ID (UUID format)" format(uuid)
-// @Success 200 {object} responses.UserResponseDto "User details"
+// @Success 200 {object} responses.UserResponseDto
 // @Failure 400 {object} map[string]string "Invalid UUID format"
 // @Failure 404 {object} map[string]string "User not found"
 // @Failure 500 {object} map[string]string "Internal server error"
 // @Router /api/users/{id} [get]
 func GetUserByID(c *fiber.Ctx) error {
-    id := c.Params("id") // this is a string
+    id := c.Params("id")
     user, err := users.GetUserByID(id)
+    if err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error": err.Error(),
+        })
+    }
+    if user == nil {
+        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+            "error": "User not found",
+        })
+    }
+    return c.JSON(user)
+}
+
+// GetUserByEmail godoc
+// @Summary Get a user by email
+// @Description Returns a single user based on their email
+// @Tags users
+// @Produce json
+// @Param email query string true "User email"
+// @Success 200 {object} responses.UserResponseDto
+// @Failure 400 {object} map[string]string "Missing or invalid email"
+// @Failure 404 {object} map[string]string "User not found"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /api/users/by-email [get]
+func GetUserByEmail(c *fiber.Ctx) error {
+    email := c.Query("email")
+    if email == "" {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "error": "Missing required email query parameter",
+        })
+    }
+
+    user, err := getUserByEmailHandler.Handle(context.Background(), get_user_by_email.Query{Email: email})
     if err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "error": err.Error(),
