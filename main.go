@@ -45,6 +45,7 @@ func main() {
     // Register user routes
     routes.RegisterUserRoutes(app);
 	routes.RegisterHealthRoutes(app);
+    routes.RegisterAuthRoutes(app);
 
     // Start server
     log.Fatal(app.Listen(":3000"))

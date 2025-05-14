@@ -1,5 +1,15 @@
 basePath: /
 definitions:
+  requests.LoginUserRequestDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   requests.RegisterUserRequestDto:
     properties:
       email:
@@ -13,6 +23,13 @@ definitions:
     - email
     - name
     - password
+    type: object
+  responses.LoginUserResponseDto:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
     type: object
   responses.UserResponseDto:
     properties:
@@ -29,6 +46,46 @@ info:
   title: Fiber BE Template API
   version: "1.0"
 paths:
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user with email and password
+      parameters:
+      - description: User credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginUserRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.LoginUserResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Authenticate user
+      tags:
+      - auth
   /api/health:
     get:
       description: Returns app and DB status
