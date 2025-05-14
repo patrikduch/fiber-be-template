@@ -12,6 +12,7 @@ This is a simple backend template built with [Go Fiber v2](https://github.com/go
 - 📜 Request logging with middleware
 - 📘 Swagger (OpenAPI) documentation
 - 🧪 Easily extendable for routes, services, and database layers
+- 🐳 Docker-based production deployment
 
 ---
 
@@ -236,7 +237,17 @@ swag init
 ---
 
 
-docker build -t spiner-go-be:latest . docker run -p 8081:80 spiner-go-be:latest
+## 🐳 Docker Deployment (Production-Ready)
+
+This project includes a production-ready Dockerfile using a multi-stage build for minimal image size and fast startup.
+
+---
+
+### 🛠️ Build the Docker Image
+
+```bash
+docker build -t fiber-be-template:latest .
+
 
 
 
