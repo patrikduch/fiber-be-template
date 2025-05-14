@@ -19,7 +19,4 @@ func RegisterUserRoutes(app fiber.Router) {
 
     // 🔍 Get by ID (must be last to avoid route conflicts)
     user.Get("/:id", controllers.GetUserByID)
-
-    // ➕ Create user manually (if still used)
-    user.Post("/", controllers.CreateUser)
 }

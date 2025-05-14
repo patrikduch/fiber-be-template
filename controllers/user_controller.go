@@ -90,31 +90,6 @@ func GetUserByEmail(c *fiber.Ctx) error {
     return c.JSON(user)
 }
 
-// CreateUser godoc
-// @Summary Create a new user
-// @Description Create a new user from request body
-// @Tags users
-// @Accept json
-// @Produce json
-// @Param user body requests.CreateUserRequestDto true "User to create"
-// @Success 201 {object} responses.UserResponseDto
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
-// @Router /api/users [post]
-func CreateUser(c *fiber.Ctx) error {
-    var req requests.CreateUserRequestDto
-    if err := c.BodyParser(&req); err != nil {
-        return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
-    }
-
-    user, err := users.CreateUser(req)
-    if err != nil {
-        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
-    }
-
-    return c.Status(201).JSON(user)
-}
-
 
 // RegisterUser godoc
 // @Summary Register a new user

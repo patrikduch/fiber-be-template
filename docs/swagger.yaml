@@ -1,12 +1,5 @@
 basePath: /
 definitions:
-  requests.CreateUserRequestDto:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-    type: object
   requests.RegisterUserRequestDto:
     properties:
       email:
@@ -70,39 +63,6 @@ paths:
               $ref: '#/definitions/responses.UserResponseDto'
             type: array
       summary: Get all users
-      tags:
-      - users
-    post:
-      consumes:
-      - application/json
-      description: Create a new user from request body
-      parameters:
-      - description: User to create
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/requests.CreateUserRequestDto'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/responses.UserResponseDto'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Create a new user
       tags:
       - users
   /api/users/{id}:
