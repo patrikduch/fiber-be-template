@@ -117,3 +117,8 @@ Sample `CreateUser` annotation:
 // @Router /users [post]
 ```
 ```
+
+
+
+e>go run entgo.io/ent/cmd/ent generate ./ent/schema
+

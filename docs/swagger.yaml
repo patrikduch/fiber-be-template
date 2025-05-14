@@ -12,7 +12,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
     type: object
@@ -93,28 +93,35 @@ paths:
       - users
   /api/users/{id}:
     get:
-      description: Returns a single user based on ID
+      description: Returns a single user based on their UUID
       parameters:
-      - description: User ID
+      - description: User ID (UUID format)
+        format: uuid
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: User details
           schema:
             $ref: '#/definitions/responses.UserResponseDto'
         "400":
-          description: Bad Request
+          description: Invalid UUID format
           schema:
             additionalProperties:
               type: string
             type: object
         "404":
-          description: Not Found
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
           schema:
             additionalProperties:
               type: string

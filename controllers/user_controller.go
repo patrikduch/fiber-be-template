@@ -26,13 +26,14 @@ func GetUsers(c *fiber.Ctx) error {
 
 // GetUserByID godoc
 // @Summary Get a user by ID
-// @Description Returns a single user based on ID
+// @Description Returns a single user based on their UUID
 // @Tags users
 // @Produce json
-// @Param id path int true "User ID"
-// @Success 200 {object} responses.UserResponseDto
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
+// @Param id path string true "User ID (UUID format)" format(uuid)
+// @Success 200 {object} responses.UserResponseDto "User details"
+// @Failure 400 {object} map[string]string "Invalid UUID format"
+// @Failure 404 {object} map[string]string "User not found"
+// @Failure 500 {object} map[string]string "Internal server error"
 // @Router /api/users/{id} [get]
 func GetUserByID(c *fiber.Ctx) error {
     id := c.Params("id") // this is a string

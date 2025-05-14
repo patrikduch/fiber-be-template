@@ -122,7 +122,7 @@ const docTemplate = `{
         },
         "/api/users/{id}": {
             "get": {
-                "description": "Returns a single user based on ID",
+                "description": "Returns a single user based on their UUID",
                 "produces": [
                     "application/json"
                 ],
@@ -132,8 +132,9 @@ const docTemplate = `{
                 "summary": "Get a user by ID",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "User ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID format)",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -141,13 +142,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "User details",
                         "schema": {
                             "$ref": "#/definitions/responses.UserResponseDto"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Invalid UUID format",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -156,7 +157,16 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "Not Found",
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -187,7 +197,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
