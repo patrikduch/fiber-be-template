@@ -9,7 +9,6 @@ import (
     "fiber-be-template/database"
     "fiber-be-template/ent"
     "fiber-be-template/ent/user"
-    "fiber-be-template/dtos/users/requests"
     "fiber-be-template/dtos/users/responses"
     "fiber-be-template/mappers/users"
     "fiber-be-template/models"
@@ -79,24 +78,4 @@ func GetUserByID(id string) (*responses.UserResponseDto, error) {
     // Use the existing mapper function
     dto := users.ToUserResponseDto(u)
     return &dto, nil
-}
-
-// CreateUser inserts a user and returns the result
-// This could also be updated to use Ent, but keeping your original implementation for now
-func CreateUser(req requests.CreateUserRequestDto) (*responses.UserResponseDto, error) {
-    var id string
-    err := database.DB.QueryRow(
-        `INSERT INTO "User"(Id, UserName, Email) VALUES($1, $2, $3) RETURNING Id`,
-        uuid.New(), req.Name, req.Email,
-    ).Scan(&id)
-    
-    if err != nil {
-        return nil, err
-    }
-    
-    return &responses.UserResponseDto{
-        ID:    id,
-        Name:  req.Name,
-        Email: req.Email,
-    }, nil
 }

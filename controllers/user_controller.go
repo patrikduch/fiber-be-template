@@ -7,12 +7,16 @@ import (
     "fiber-be-template/dtos/users/requests"
     "fiber-be-template/queries/get_all_users"
     "fiber-be-template/queries/get_user_by_email"
+    "fiber-be-template/queries/get_user_by_id"
     "fiber-be-template/services/users"
     "fiber-be-template/commands/users/register_user"
 )
 
-var getAllUsersHandler = get_all_users.NewHandler()
-var getUserByEmailHandler = get_user_by_email.NewHandler()
+var (
+	getAllUsersHandler     = get_all_users.NewHandler()
+	getUserByEmailHandler  = get_user_by_email.NewHandler()
+	getUserByIDHandler     = get_user_by_id.NewHandler()
+)
 
 // GetUsers godoc
 // @Summary Get all users
@@ -109,16 +113,16 @@ func GetUserByEmail(c *fiber.Ctx) error {
 // @Failure 500 {object} map[string]string
 // @Router /api/users/register [post]
 func RegisterUser(c *fiber.Ctx) error {
-    var registerUserHandler = register_user.NewHandler()
-    var req requests.RegisterUserRequestDto
-    if err := c.BodyParser(&req); err != nil {
-        return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
-    }
+	var registerUserHandler = register_user.NewHandler()
+	var req requests.RegisterUserRequestDto
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+	}
 
-    user, err := registerUserHandler.Handle(context.Background(), register_user.Command{Payload: req})
-    if err != nil {
-        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
-    }
+	user, err := registerUserHandler.Handle(context.Background(), register_user.Command{Payload: req})
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
 
-    return c.Status(201).JSON(user)
+	return c.Status(201).JSON(user)
 }

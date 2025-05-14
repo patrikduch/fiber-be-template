@@ -9,11 +9,11 @@ import (
 func RegisterUserRoutes(app fiber.Router) {
     user := app.Group("/api/users")
 
-    // 🔐 JWT-protected routes
-    user.Use(jwtmiddleware.Protected())
-
     // 📥 User registration (must come before dynamic :id route)
     user.Post("/register", controllers.RegisterUser)
+
+        // 🔐 JWT-protected routes
+    user.Use(jwtmiddleware.Protected())
 
     // 📧 Get user by email
     user.Get("/by-email", controllers.GetUserByEmail)
