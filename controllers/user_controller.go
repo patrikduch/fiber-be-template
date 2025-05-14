@@ -21,6 +21,7 @@ var getUserByEmailHandler = get_user_by_email.NewHandler()
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {array} responses.UserResponseDto
+// @Failure 401 {object} map[string]string "Unauthorized"
 // @Router /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
     result, err := getAllUsersHandler.Handle(context.Background(), get_all_users.Query{})

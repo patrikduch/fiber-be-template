@@ -247,8 +247,7 @@ This project includes a production-ready Dockerfile using a multi-stage build fo
 
 ```bash
 docker build -t fiber-be-template:latest .
-
-
+---
 
 
 
