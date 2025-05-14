@@ -10,7 +10,7 @@ import (
 // Convert User model to response DTO
 func ToUserResponseDto(user models.User) responses.UserResponseDto {
     return responses.UserResponseDto{
-        ID:    user.ID.String(), // Convert UUID to string
+        ID:    user.ID.String(),
         Name:  user.Name,
         Email: user.Email,
     }

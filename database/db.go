@@ -5,8 +5,7 @@ import (
     "log"
     "os"
     
-    "fiber-be-template/ent"  // Import your Ent package
-    
+    "fiber-be-template/ent" 
     _ "github.com/lib/pq"
 )
 
@@ -36,12 +35,7 @@ func Init() {
     if err != nil {
         log.Fatalf("Failed to create Ent client: %v", err)
     }
-    
-    // Optional: Run migrations (remove if you prefer to manage migrations separately)
-    // if err := EntClient.Schema.Create(context.Background()); err != nil {
-    //     log.Fatalf("Failed to create schema: %v", err)
-    // }
-    
+        
     log.Println("Ent client initialized")
 }
 
