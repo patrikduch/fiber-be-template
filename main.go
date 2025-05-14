@@ -11,6 +11,8 @@ package main
 import (
     "log"
 
+     "os"
+
     "github.com/gofiber/fiber/v2"
     "github.com/gofiber/fiber/v2/middleware/logger"
     "github.com/gofiber/fiber/v2/middleware/cors"
@@ -50,6 +52,16 @@ func main() {
     routes.RegisterUserRoutes(app);
 	routes.RegisterHealthRoutes(app);
     routes.RegisterAuthRoutes(app);
+
+
+    // Get port from env or fallback
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "3000"
+    }
+
+    // Start server
+    log.Fatal(app.Listen(":" + port))
 
     // Start server
     log.Fatal(app.Listen(":3000"))

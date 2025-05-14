@@ -235,6 +235,12 @@ swag init
 
 ---
 
+
+docker build -t spiner-go-be:latest . docker run -p 8081:80 spiner-go-be:latest
+
+
+
+
 ## 🛠️ Contribution
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
