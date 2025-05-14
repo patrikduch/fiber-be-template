@@ -8,7 +8,6 @@ import (
     "fiber-be-template/queries/get_all_users"
     "fiber-be-template/queries/get_user_by_email"
     "fiber-be-template/queries/get_user_by_id"
-    "fiber-be-template/services/users"
     "fiber-be-template/commands/users/register_user"
 )
 
@@ -50,7 +49,8 @@ func GetUsers(c *fiber.Ctx) error {
 // @Router /api/users/{id} [get]
 func GetUserByID(c *fiber.Ctx) error {
     id := c.Params("id")
-    user, err := users.GetUserByID(id)
+
+    user, err := getUserByIDHandler.Handle(context.Background(), get_user_by_id.Query{ID: id})
     if err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "error": err.Error(),
@@ -61,9 +61,9 @@ func GetUserByID(c *fiber.Ctx) error {
             "error": "User not found",
         })
     }
+
     return c.JSON(user)
 }
-
 // GetUserByEmail godoc
 // @Summary Get a user by email
 // @Description Returns a single user based on their email
