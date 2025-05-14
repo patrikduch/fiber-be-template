@@ -234,7 +234,6 @@ After changes to your route annotations:
 swag init
 ```
 
----
 
 
 ## 🐳 Docker Deployment (Production-Ready)
@@ -247,7 +246,7 @@ This project includes a production-ready Dockerfile using a multi-stage build fo
 
 ```bash
 docker build -t fiber-be-template:latest .
----
+```
 
 
 
