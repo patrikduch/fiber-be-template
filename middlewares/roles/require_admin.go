@@ -3,6 +3,7 @@ package roles
 import (
 	"github.com/gofiber/fiber/v2"
 	"fiber-be-template/utils/authctx"
+	"fiber-be-template/constants"
 )
 
 func RequireAdmin() fiber.Handler {
@@ -14,7 +15,7 @@ func RequireAdmin() fiber.Handler {
 			})
 		}
 
-		if user.Role == nil || user.Role.Name != "admin" {
+		if user.Role == nil || user.Role.Name != constants.RoleAdmin {
 			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
 				"error": "You do not have permission to perform this action.",
 			})

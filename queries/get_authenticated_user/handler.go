@@ -4,9 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
-	"github.com/google/uuid"
-
+	
 	"fiber-be-template/database"
 	"fiber-be-template/dtos/users/responses"
 	"fiber-be-template/mappers/users"
@@ -23,31 +21,24 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) Handle(ctx context.Context, _ Query) (*responses.AuthMeResponseDto, error) {
-	// Get user ID string from context
-	userIDStr, ok := authctx.UserIDFromContext(ctx)
-	if !ok {
+	// ✅ Extract email instead of user ID
+	email, ok := authctx.UserEmailFromContext(ctx)
+	if !ok || email == "" {
 		return nil, errors.New("unauthorized")
 	}
 
-	// Convert to uuid.UUID
-	userID, err := uuid.Parse(userIDStr)
-	if err != nil {
-		return nil, fmt.Errorf("invalid user ID format: %w", err)
-	}
-
 	entUser, err := database.EntClient.User.
-	Query().
-	Where(user.IDEQ(userID)).
-	WithUserRoles(func(q *ent.UserRoleQuery) {
-		q.WithRole()
-	}).
-	Only(ctx)
+		Query().
+		Where(user.EmailEQ(email)).
+		WithUserRoles(func(q *ent.UserRoleQuery) {
+			q.WithRole()
+		}).
+		Only(ctx)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed retrieving user: %w", err)
 	}
 
-	// Map entUser to internal model
 	userModel := models.User{
 		ID:    entUser.ID,
 		Name:  entUser.Username,
