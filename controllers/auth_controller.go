@@ -16,7 +16,7 @@ var getAuthenticatedUserHandler = get_authenticated_user.NewHandler()
 // LoginUser godoc
 // @Summary Authenticate user
 // @Description Login user with email and password
-// @Tags auth
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param credentials body requests.LoginUserRequestDto true "User credentials"
@@ -45,7 +45,7 @@ func LoginUser(c *fiber.Ctx) error {
 // Me godoc
 // @Summary Get current user
 // @Description Get authenticated user's information
-// @Tags auth
+// @Tags Auth
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} responses.AuthMeResponseDto

@@ -125,7 +125,7 @@ paths:
             type: object
       summary: Authenticate user
       tags:
-      - auth
+      - Auth
   /api/auth/me:
     get:
       description: Get authenticated user's information
@@ -148,7 +148,7 @@ paths:
       - BearerAuth: []
       summary: Get current user
       tags:
-      - auth
+      - Auth
   /api/health:
     get:
       description: Returns app and DB status

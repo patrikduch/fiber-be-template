@@ -17,7 +17,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Authenticate user",
                 "parameters": [
@@ -80,7 +80,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Get current user",
                 "responses": {
