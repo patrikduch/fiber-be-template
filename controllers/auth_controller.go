@@ -21,9 +21,9 @@ var getAuthenticatedUserHandler = get_authenticated_user.NewHandler()
 // @Produce json
 // @Param credentials body requests.LoginUserRequestDto true "User credentials"
 // @Success 200 {object} responses.LoginUserResponseDto
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} common.Error400Response "Invalid request"
+// @Failure 401 {object} common.Error401Response "Invalid credentials"
+// @Failure 500 {object} common.Error500Response "Internal server error"
 // @Router /api/auth/login [post]
 func LoginUser(c *fiber.Ctx) error {
 	var req requests.LoginUserRequestDto
