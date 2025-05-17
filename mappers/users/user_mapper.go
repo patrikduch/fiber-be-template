@@ -24,3 +24,15 @@ func ToUserModel(dto requests.CreateUserRequestDto) models.User {
         Email: dto.Email,
     }
 }
+
+func ToAuthMeResponseDto(user models.User) responses.AuthMeResponseDto {
+	dto := responses.AuthMeResponseDto{
+		ID:    user.ID.String(), // FIXED
+		Email: user.Email,
+		Name:  user.Name,
+	}
+	if user.Role != nil {
+		dto.Role = user.Role.Name
+	}
+	return dto
+}
