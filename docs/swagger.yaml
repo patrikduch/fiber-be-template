@@ -66,6 +66,15 @@ definitions:
       role:
         type: string
     type: object
+  responses.HealthStatusResponse:
+    properties:
+      app:
+        example: OK
+        type: string
+      db:
+        example: OK
+        type: string
+    type: object
   responses.LoginUserResponseDto:
     properties:
       accessToken:
@@ -145,25 +154,21 @@ paths:
       - Auth
   /api/health:
     get:
-      description: Returns app and DB status
+      description: Returns application and database health status
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/responses.HealthStatusResponse'
         "500":
-          description: Internal Server Error
+          description: Internal server error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/common.Error500Response'
       summary: Health check
       tags:
-      - health
+      - Health
   /api/users:
     get:
       description: Returns list of users

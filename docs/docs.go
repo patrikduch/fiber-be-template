@@ -106,31 +106,25 @@ const docTemplate = `{
         },
         "/api/health": {
             "get": {
-                "description": "Returns app and DB status",
+                "description": "Returns application and database health status",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "health"
+                    "Health"
                 ],
                 "summary": "Health check",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/responses.HealthStatusResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/common.Error500Response"
                         }
                     }
                 }
@@ -447,6 +441,19 @@ const docTemplate = `{
                 },
                 "role": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.HealthStatusResponse": {
+            "type": "object",
+            "properties": {
+                "app": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "db": {
+                    "type": "string",
+                    "example": "OK"
                 }
             }
         },
