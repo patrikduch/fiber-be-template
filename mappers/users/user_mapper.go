@@ -25,7 +25,7 @@ func ToUserModel(dto requests.CreateUserRequestDto) models.User {
 
 func ToAuthMeResponseDto(user models.User) responses.AuthMeResponseDto {
 	dto := responses.AuthMeResponseDto{
-		ID:    user.ID.String(), // FIXED
+		ID:    user.ID.String(),
 		Email: user.Email,
 		Name:  user.Name,
 	}
