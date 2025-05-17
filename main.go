@@ -43,11 +43,6 @@ func main() {
 	   // Swagger UI
     app.Get("/swagger/*", swagger.HandlerDefault)
 
-    // Health route
-    app.Get("/", func(c *fiber.Ctx) error {
-        return c.SendString("Hello, Fiber!")
-    })
-
     // Register user routes
     routes.RegisterUserRoutes(app);
 	routes.RegisterHealthRoutes(app);
