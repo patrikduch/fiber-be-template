@@ -18,6 +18,7 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) Handle(ctx context.Context, _ Query) ([]responses.UserResponseDto, error) {
+
 	entUsers, err := database.EntClient.User.
 		Query().
 		WithUserRoles(func(q *ent.UserRoleQuery) {

@@ -32,25 +32,21 @@ func ExtractClaimsToContext() fiber.Handler {
 
 		log.Println("[JWT] Extracted claims:", claims)
 
-		subStr, ok := claims["sub"].(string)
-		if !ok {
-			log.Println("[JWT] Missing or invalid 'sub' claim")
+		emailStr, emailOk := claims["email"].(string)
+		if !emailOk || emailStr == "" {
+			log.Println("[JWT] Missing or invalid 'email' claim")
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-				"error": "Missing 'sub' claim in token",
+				"error": "Missing 'email' claim in token",
 			})
 		}
-		log.Println("[JWT] sub (user ID):", subStr)
 
-		emailStr, _ := claims["email"].(string)
 		log.Println("[JWT] email:", emailStr)
 
-		ctx := authctx.WithUserID(c.UserContext(), subStr)
-		if emailStr != "" {
-			ctx = authctx.WithUserEmail(ctx, emailStr)
-		}
-
+		// Store email in context
+		ctx := authctx.WithUserEmail(c.UserContext(), emailStr)
 		c.SetUserContext(ctx)
-		log.Println("[JWT] Injected sub and email into request context")
+
+		log.Println("[JWT] Injected email into request context")
 
 		return c.Next()
 	}

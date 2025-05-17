@@ -1,26 +1,39 @@
 package routes
 
 import (
-    "github.com/gofiber/fiber/v2"
-    "fiber-be-template/controllers"
-    jwtmiddleware "fiber-be-template/middlewares/jwt"
+	"github.com/gofiber/fiber/v2"
+	"fiber-be-template/controllers"
+	jwtmiddleware "fiber-be-template/middlewares/jwt"
+	rolemiddleware "fiber-be-template/middlewares/roles"
 )
 
 func RegisterUserRoutes(app fiber.Router) {
-    user := app.Group("/api/users")
+	user := app.Group("/api/users")
 
-    // 📥 User registration (must come before dynamic :id route)
-    user.Post("/register", controllers.RegisterUser)
+	// Public route
+	user.Post("/register", controllers.RegisterUser)
 
-        // 🔐 JWT-protected routes
-    user.Use(jwtmiddleware.Protected())
+	// Apply base JWT middleware (token validation + claim injection)
+	user.Use(
+		jwtmiddleware.Protected(),
+		jwtmiddleware.ExtractClaimsToContext(),
+	)
 
-    // 📧 Get user by email
-    user.Get("/by-email", controllers.GetUserByEmail)
+	// 📧 Get user by email — authenticated only (for testing)
+	user.Get("/by-email",
+		rolemiddleware.RequireAuthenticated(),
+		controllers.GetUserByEmail,
+	)
 
-    // 📋 Get all users
-    user.Get("/", controllers.GetUsers)
+	// 📋 Get all users — admin only
+	user.Get("/",
+		rolemiddleware.RequireRoles("admin"),
+		controllers.GetUsers,
+	)
 
-    // 🔍 Get by ID (must be last to avoid route conflicts)
-    user.Get("/:id", controllers.GetUserByID)
+	// 🔍 Get user by ID — admin only
+	user.Get("/:id",
+		rolemiddleware.RequireRoles("admin"),
+		controllers.GetUserByID,
+	)
 }
