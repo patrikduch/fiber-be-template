@@ -19,9 +19,9 @@ func RegisterUserRoutes(app fiber.Router) {
 		jwtmiddleware.ExtractClaimsToContext(),
 	)
 
-	// 📧 Get user by email — authenticated only (for testing)
+	// 📧 Get user by email — admin only
 	user.Get("/by-email",
-		rolemiddleware.RequireAuthenticated(),
+		rolemiddleware.RequireRoles("admin"),
 		controllers.GetUserByEmail,
 	)
 
