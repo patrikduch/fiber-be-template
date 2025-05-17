@@ -19,20 +19,24 @@ var (
 )
 
 // GetUsers godoc
-// @Summary Get all users
-// @Description Returns list of users
-// @Tags Users
-// @Security BearerAuth
-// @Produce json
-// @Success 200 {array} responses.UserResponseDto
-// @Failure 401 {object} common.ErrorResponse "Unauthorized"
-// @Router /api/users [get]
+// @Summary      Get all users
+// @Description  Retrieves a list of all users.
+// @Tags         Users
+// @Security     BearerAuth
+// @Produce      json
+// @Success      200 {array} responses.UserResponseDto
+// @Failure      401 {object} common.Error401Response "Unauthorized"
+// @Failure      500 {object} common.Error500Response "Internal Server Error"
+// @Router       /api/users [get]
 func GetUsers(c *fiber.Ctx) error {
     result, err := getAllUsersHandler.Handle(context.Background(), get_all_users.Query{})
     if err != nil {
-        return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+        return c.Status(fiber.StatusInternalServerError).JSON(common.Error500Response{
+            Error: "Failed to retrieve users",
+        })
     }
-    return c.JSON(result)
+
+    return c.Status(fiber.StatusOK).JSON(result)
 }
 
 // GetUserByID godoc
@@ -43,27 +47,34 @@ func GetUsers(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "User ID (UUID format)" format(uuid)
 // @Success 200 {object} responses.UserResponseDto
-// @Failure 400 {object} map[string]string "Invalid UUID format"
-// @Failure 401 {object} common.ErrorResponse "Unauthorized"
-// @Failure 404 {object} map[string]string "User not found"
-// @Failure 500 {object} map[string]string "Internal server error"
+// @Failure 400 {object} common.Error400Response "Invalid UUID format"
+// @Failure 401 {object} common.Error401Response "Unauthorized"
+// @Failure 404 {object} common.Error404Response "User not found"
+// @Failure 500 {object} common.Error500Response "Internal server error"
 // @Router /api/users/{id} [get]
 func GetUserByID(c *fiber.Ctx) error {
-    id := c.Params("id")
+	id := c.Params("id")
 
-    user, err := getUserByIDHandler.Handle(context.Background(), get_user_by_id.Query{ID: id})
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "error": err.Error(),
-        })
-    }
-    if user == nil {
-        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-            "error": "User not found",
-        })
-    }
+	// Optional: validate UUID format early
+	if len(id) != 36 {
+		return c.Status(fiber.StatusBadRequest).JSON(common.Error400Response{
+			Error: "Invalid UUID format",
+		})
+	}
 
-    return c.JSON(user)
+	user, err := getUserByIDHandler.Handle(context.Background(), get_user_by_id.Query{ID: id})
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(common.Error500Response{
+			Error: "Failed to retrieve user: " + err.Error(),
+		})
+	}
+	if user == nil {
+		return c.Status(fiber.StatusNotFound).JSON(common.Error404Response{
+			Error: "User not found",
+		})
+	}
+
+	return c.JSON(user)
 }
 
 // GetUserByEmail godoc
@@ -102,7 +113,6 @@ func GetUserByEmail(c *fiber.Ctx) error {
 
 	return c.JSON(user)
 }
-
 // RegisterUser godoc
 // @Summary Register a new user
 // @Description Creates a user with name, email, and password
@@ -111,20 +121,25 @@ func GetUserByEmail(c *fiber.Ctx) error {
 // @Produce json
 // @Param user body requests.RegisterUserRequestDto true "User registration payload"
 // @Success 201 {object} responses.UserResponseDto
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} common.Error400Response "Invalid input"
+// @Failure 500 {object} common.Error500Response "Internal server error"
 // @Router /api/users/register [post]
 func RegisterUser(c *fiber.Ctx) error {
 	var registerUserHandler = register_user.NewHandler()
+
 	var req requests.RegisterUserRequestDto
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+		return c.Status(fiber.StatusBadRequest).JSON(common.Error400Response{
+			Error: "Invalid request body",
+		})
 	}
 
 	user, err := registerUserHandler.Handle(context.Background(), register_user.Command{Payload: req})
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusInternalServerError).JSON(common.Error500Response{
+			Error: "Failed to register user: " + err.Error(),
+		})
 	}
 
-	return c.Status(201).JSON(user)
+	return c.Status(fiber.StatusCreated).JSON(user)
 }

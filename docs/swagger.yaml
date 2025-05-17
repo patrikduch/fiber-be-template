@@ -23,12 +23,6 @@ definitions:
         example: Internal server error
         type: string
     type: object
-  common.ErrorResponse:
-    properties:
-      error:
-        example: Unauthorized
-        type: string
-    type: object
   requests.LoginUserRequestDto:
     properties:
       email:
@@ -91,7 +85,7 @@ definitions:
     type: object
 info:
   contact: {}
-  description: This is a sample API with JWT auth.
+  description: This is a sample API connector for Asp.NET Identity DB.
   title: Fiber API
   version: "1.0"
 paths:
@@ -171,7 +165,7 @@ paths:
       - Health
   /api/users:
     get:
-      description: Returns list of users
+      description: Retrieves a list of all users.
       produces:
       - application/json
       responses:
@@ -184,7 +178,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/common.Error401Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Error500Response'
       security:
       - BearerAuth: []
       summary: Get all users
@@ -210,25 +208,19 @@ paths:
         "400":
           description: Invalid UUID format
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/common.Error400Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/common.Error401Response'
         "404":
           description: User not found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/common.Error404Response'
         "500":
           description: Internal server error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/common.Error500Response'
       security:
       - BearerAuth: []
       summary: Get a user by ID
@@ -291,17 +283,13 @@ paths:
           schema:
             $ref: '#/definitions/responses.UserResponseDto'
         "400":
-          description: Bad Request
+          description: Invalid input
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/common.Error400Response'
         "500":
-          description: Internal Server Error
+          description: Internal server error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/common.Error500Response'
       summary: Register a new user
       tags:
       - Users

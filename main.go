@@ -1,6 +1,6 @@
 // @title Fiber API
 // @version 1.0
-// @description This is a sample API with JWT auth.
+// @description This is a sample API connector for Asp.NET Identity DB.
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization

@@ -137,7 +137,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Returns list of users",
+                "description": "Retrieves a list of all users.",
                 "produces": [
                     "application/json"
                 ],
@@ -158,7 +158,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/common.Error401Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Error500Response"
                         }
                     }
                 }
@@ -254,21 +260,15 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Invalid input",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/common.Error400Response"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/common.Error500Response"
                         }
                     }
                 }
@@ -309,34 +309,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid UUID format",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/common.Error400Response"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/common.Error401Response"
                         }
                     },
                     "404": {
                         "description": "User not found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/common.Error404Response"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/common.Error500Response"
                         }
                     }
                 }
@@ -377,15 +368,6 @@ const docTemplate = `{
                 "error": {
                     "type": "string",
                     "example": "Internal server error"
-                }
-            }
-        },
-        "common.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string",
-                    "example": "Unauthorized"
                 }
             }
         },
@@ -497,7 +479,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Fiber API",
-	Description:      "This is a sample API with JWT auth.",
+	Description:      "This is a sample API connector for Asp.NET Identity DB.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
