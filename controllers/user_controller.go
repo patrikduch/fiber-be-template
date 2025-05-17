@@ -9,6 +9,7 @@ import (
     "fiber-be-template/queries/get_user_by_email"
     "fiber-be-template/queries/get_user_by_id"
     "fiber-be-template/commands/users/register_user"
+    "fiber-be-template/dtos/common"
 )
 
 var (
@@ -20,7 +21,7 @@ var (
 // GetUsers godoc
 // @Summary Get all users
 // @Description Returns list of users
-// @Tags users
+// @Tags Users
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {array} responses.UserResponseDto
@@ -37,7 +38,7 @@ func GetUsers(c *fiber.Ctx) error {
 // GetUserByID godoc
 // @Summary Get a user by ID
 // @Description Returns a single user based on their UUID
-// @Tags users
+// @Tags Users
 // @Security BearerAuth
 // @Produce json
 // @Param id path string true "User ID (UUID format)" format(uuid)
@@ -64,47 +65,48 @@ func GetUserByID(c *fiber.Ctx) error {
 
     return c.JSON(user)
 }
+
 // GetUserByEmail godoc
 // @Summary Get a user by email
 // @Description Returns a single user based on their email
-// @Tags users
+// @Tags Users
 // @Produce json
 // @Param email query string true "User email"
 // @Security BearerAuth
 // @Success 200 {object} responses.UserResponseDto
-// @Failure 400 {object} map[string]string "Missing or invalid email"
-// @Failure 401 {object} common.ErrorResponse "Unauthorized"
-// @Failure 404 {object} map[string]string "User not found"
-// @Failure 500 {object} map[string]string "Internal server error"
+// @Failure 400 {object} common.Error400Response "Bad request"
+// @Failure 401 {object} common.Error401Response "Unauthorized"
+// @Failure 404 {object} common.Error404Response "User not found"
+// @Failure 500 {object} common.Error500Response "Internal server error"
 // @Router /api/users/by-email [get]
 func GetUserByEmail(c *fiber.Ctx) error {
-    email := c.Query("email")
-    if email == "" {
-        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-            "error": "Missing required email query parameter",
-        })
-    }
+	email := c.Query("email")
+	if email == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(common.Error400Response{
+			Error: "Missing required 'email' query parameter",
+		})
+	}
 
-    user, err := getUserByEmailHandler.Handle(context.Background(), get_user_by_email.Query{Email: email})
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "error": err.Error(),
-        })
-    }
-    if user == nil {
-        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-            "error": "User not found",
-        })
-    }
+	user, err := getUserByEmailHandler.Handle(context.Background(), get_user_by_email.Query{Email: email})
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(common.Error500Response{
+			Error: "Failed to retrieve user",
+		})
+	}
 
-    return c.JSON(user)
+	if user == nil {
+		return c.Status(fiber.StatusNotFound).JSON(common.Error404Response{
+			Error: "User not found",
+		})
+	}
+
+	return c.JSON(user)
 }
-
 
 // RegisterUser godoc
 // @Summary Register a new user
 // @Description Creates a user with name, email, and password
-// @Tags users
+// @Tags Users
 // @Accept json
 // @Produce json
 // @Param user body requests.RegisterUserRequestDto true "User registration payload"

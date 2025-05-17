@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"context"
-
 	"github.com/gofiber/fiber/v2"
 
 	"fiber-be-template/commands/users/login_user"
 	"fiber-be-template/dtos/users/requests"
 	"fiber-be-template/queries/get_authenticated_user"
+	"fiber-be-template/dtos/common"
 )
 
 var loginUserHandler = login_user.NewHandler()
@@ -49,16 +49,20 @@ func LoginUser(c *fiber.Ctx) error {
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} responses.AuthMeResponseDto
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 401 {object} common.Error401Response "Unauthorized"
+// @Failure 500 {object} common.Error500Response "Internal server error"
 // @Router /api/auth/me [get]
 func Me(c *fiber.Ctx) error {
 	user, err := getAuthenticatedUserHandler.Handle(c.UserContext(), get_authenticated_user.Query{})
 	if err != nil {
 		if err.Error() == "unauthorized" {
-			return c.Status(401).JSON(fiber.Map{"error": "Unauthorized"})
+			return c.Status(401).JSON(common.Error401Response{
+				Error: "Unauthorized",
+			})
 		}
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(500).JSON(common.Error500Response{
+			Error: err.Error(),
+		})
 	}
 	return c.JSON(user)
 }
