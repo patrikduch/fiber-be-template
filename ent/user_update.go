@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fiber-be-template/ent/predicate"
 	"fiber-be-template/ent/user"
+	"fiber-be-template/ent/userrole"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -37,6 +39,20 @@ func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
 func (uu *UserUpdate) SetNillableUsername(s *string) *UserUpdate {
 	if s != nil {
 		uu.SetUsername(*s)
+	}
+	return uu
+}
+
+// SetNormalizedUsername sets the "normalized_username" field.
+func (uu *UserUpdate) SetNormalizedUsername(s string) *UserUpdate {
+	uu.mutation.SetNormalizedUsername(s)
+	return uu
+}
+
+// SetNillableNormalizedUsername sets the "normalized_username" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableNormalizedUsername(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetNormalizedUsername(*s)
 	}
 	return uu
 }
@@ -69,6 +85,20 @@ func (uu *UserUpdate) SetNillableNormalizedEmail(s *string) *UserUpdate {
 	return uu
 }
 
+// SetEmailConfirmed sets the "email_confirmed" field.
+func (uu *UserUpdate) SetEmailConfirmed(b bool) *UserUpdate {
+	uu.mutation.SetEmailConfirmed(b)
+	return uu
+}
+
+// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableEmailConfirmed(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetEmailConfirmed(*b)
+	}
+	return uu
+}
+
 // SetPasswordHash sets the "password_hash" field.
 func (uu *UserUpdate) SetPasswordHash(s string) *UserUpdate {
 	uu.mutation.SetPasswordHash(s)
@@ -83,17 +113,63 @@ func (uu *UserUpdate) SetNillablePasswordHash(s *string) *UserUpdate {
 	return uu
 }
 
-// SetEmailConfirmed sets the "email_confirmed" field.
-func (uu *UserUpdate) SetEmailConfirmed(b bool) *UserUpdate {
-	uu.mutation.SetEmailConfirmed(b)
+// SetConcurrencyStamp sets the "concurrency_stamp" field.
+func (uu *UserUpdate) SetConcurrencyStamp(s string) *UserUpdate {
+	uu.mutation.SetConcurrencyStamp(s)
 	return uu
 }
 
-// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableEmailConfirmed(b *bool) *UserUpdate {
-	if b != nil {
-		uu.SetEmailConfirmed(*b)
+// SetNillableConcurrencyStamp sets the "concurrency_stamp" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableConcurrencyStamp(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetConcurrencyStamp(*s)
 	}
+	return uu
+}
+
+// ClearConcurrencyStamp clears the value of the "concurrency_stamp" field.
+func (uu *UserUpdate) ClearConcurrencyStamp() *UserUpdate {
+	uu.mutation.ClearConcurrencyStamp()
+	return uu
+}
+
+// SetSecurityStamp sets the "security_stamp" field.
+func (uu *UserUpdate) SetSecurityStamp(s string) *UserUpdate {
+	uu.mutation.SetSecurityStamp(s)
+	return uu
+}
+
+// SetNillableSecurityStamp sets the "security_stamp" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableSecurityStamp(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetSecurityStamp(*s)
+	}
+	return uu
+}
+
+// ClearSecurityStamp clears the value of the "security_stamp" field.
+func (uu *UserUpdate) ClearSecurityStamp() *UserUpdate {
+	uu.mutation.ClearSecurityStamp()
+	return uu
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (uu *UserUpdate) SetPhoneNumber(s string) *UserUpdate {
+	uu.mutation.SetPhoneNumber(s)
+	return uu
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePhoneNumber(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetPhoneNumber(*s)
+	}
+	return uu
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (uu *UserUpdate) ClearPhoneNumber() *UserUpdate {
+	uu.mutation.ClearPhoneNumber()
 	return uu
 }
 
@@ -160,9 +236,45 @@ func (uu *UserUpdate) AddAccessFailedCount(i int) *UserUpdate {
 	return uu
 }
 
+// AddUserRoleIDs adds the "user_roles" edge to the UserRole entity by IDs.
+func (uu *UserUpdate) AddUserRoleIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.AddUserRoleIDs(ids...)
+	return uu
+}
+
+// AddUserRoles adds the "user_roles" edges to the UserRole entity.
+func (uu *UserUpdate) AddUserRoles(u ...*UserRole) *UserUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.AddUserRoleIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
+}
+
+// ClearUserRoles clears all "user_roles" edges to the UserRole entity.
+func (uu *UserUpdate) ClearUserRoles() *UserUpdate {
+	uu.mutation.ClearUserRoles()
+	return uu
+}
+
+// RemoveUserRoleIDs removes the "user_roles" edge to UserRole entities by IDs.
+func (uu *UserUpdate) RemoveUserRoleIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.RemoveUserRoleIDs(ids...)
+	return uu
+}
+
+// RemoveUserRoles removes "user_roles" edges to UserRole entities.
+func (uu *UserUpdate) RemoveUserRoles(u ...*UserRole) *UserUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.RemoveUserRoleIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -199,6 +311,11 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
 		}
 	}
+	if v, ok := uu.mutation.NormalizedUsername(); ok {
+		if err := user.NormalizedUsernameValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_username", err: fmt.Errorf(`ent: validator failed for field "User.normalized_username": %w`, err)}
+		}
+	}
 	if v, ok := uu.mutation.Email(); ok {
 		if err := user.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
@@ -232,17 +349,38 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
+	if value, ok := uu.mutation.NormalizedUsername(); ok {
+		_spec.SetField(user.FieldNormalizedUsername, field.TypeString, value)
+	}
 	if value, ok := uu.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.NormalizedEmail(); ok {
 		_spec.SetField(user.FieldNormalizedEmail, field.TypeString, value)
 	}
+	if value, ok := uu.mutation.EmailConfirmed(); ok {
+		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+	}
 	if value, ok := uu.mutation.PasswordHash(); ok {
 		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.EmailConfirmed(); ok {
-		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+	if value, ok := uu.mutation.ConcurrencyStamp(); ok {
+		_spec.SetField(user.FieldConcurrencyStamp, field.TypeString, value)
+	}
+	if uu.mutation.ConcurrencyStampCleared() {
+		_spec.ClearField(user.FieldConcurrencyStamp, field.TypeString)
+	}
+	if value, ok := uu.mutation.SecurityStamp(); ok {
+		_spec.SetField(user.FieldSecurityStamp, field.TypeString, value)
+	}
+	if uu.mutation.SecurityStampCleared() {
+		_spec.ClearField(user.FieldSecurityStamp, field.TypeString)
+	}
+	if value, ok := uu.mutation.PhoneNumber(); ok {
+		_spec.SetField(user.FieldPhoneNumber, field.TypeString, value)
+	}
+	if uu.mutation.PhoneNumberCleared() {
+		_spec.ClearField(user.FieldPhoneNumber, field.TypeString)
 	}
 	if value, ok := uu.mutation.PhoneNumberConfirmed(); ok {
 		_spec.SetField(user.FieldPhoneNumberConfirmed, field.TypeBool, value)
@@ -258,6 +396,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.AddedAccessFailedCount(); ok {
 		_spec.AddField(user.FieldAccessFailedCount, field.TypeInt, value)
+	}
+	if uu.mutation.UserRolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedUserRolesIDs(); len(nodes) > 0 && !uu.mutation.UserRolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.UserRolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -293,6 +476,20 @@ func (uuo *UserUpdateOne) SetNillableUsername(s *string) *UserUpdateOne {
 	return uuo
 }
 
+// SetNormalizedUsername sets the "normalized_username" field.
+func (uuo *UserUpdateOne) SetNormalizedUsername(s string) *UserUpdateOne {
+	uuo.mutation.SetNormalizedUsername(s)
+	return uuo
+}
+
+// SetNillableNormalizedUsername sets the "normalized_username" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableNormalizedUsername(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetNormalizedUsername(*s)
+	}
+	return uuo
+}
+
 // SetEmail sets the "email" field.
 func (uuo *UserUpdateOne) SetEmail(s string) *UserUpdateOne {
 	uuo.mutation.SetEmail(s)
@@ -321,6 +518,20 @@ func (uuo *UserUpdateOne) SetNillableNormalizedEmail(s *string) *UserUpdateOne {
 	return uuo
 }
 
+// SetEmailConfirmed sets the "email_confirmed" field.
+func (uuo *UserUpdateOne) SetEmailConfirmed(b bool) *UserUpdateOne {
+	uuo.mutation.SetEmailConfirmed(b)
+	return uuo
+}
+
+// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableEmailConfirmed(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetEmailConfirmed(*b)
+	}
+	return uuo
+}
+
 // SetPasswordHash sets the "password_hash" field.
 func (uuo *UserUpdateOne) SetPasswordHash(s string) *UserUpdateOne {
 	uuo.mutation.SetPasswordHash(s)
@@ -335,17 +546,63 @@ func (uuo *UserUpdateOne) SetNillablePasswordHash(s *string) *UserUpdateOne {
 	return uuo
 }
 
-// SetEmailConfirmed sets the "email_confirmed" field.
-func (uuo *UserUpdateOne) SetEmailConfirmed(b bool) *UserUpdateOne {
-	uuo.mutation.SetEmailConfirmed(b)
+// SetConcurrencyStamp sets the "concurrency_stamp" field.
+func (uuo *UserUpdateOne) SetConcurrencyStamp(s string) *UserUpdateOne {
+	uuo.mutation.SetConcurrencyStamp(s)
 	return uuo
 }
 
-// SetNillableEmailConfirmed sets the "email_confirmed" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableEmailConfirmed(b *bool) *UserUpdateOne {
-	if b != nil {
-		uuo.SetEmailConfirmed(*b)
+// SetNillableConcurrencyStamp sets the "concurrency_stamp" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableConcurrencyStamp(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetConcurrencyStamp(*s)
 	}
+	return uuo
+}
+
+// ClearConcurrencyStamp clears the value of the "concurrency_stamp" field.
+func (uuo *UserUpdateOne) ClearConcurrencyStamp() *UserUpdateOne {
+	uuo.mutation.ClearConcurrencyStamp()
+	return uuo
+}
+
+// SetSecurityStamp sets the "security_stamp" field.
+func (uuo *UserUpdateOne) SetSecurityStamp(s string) *UserUpdateOne {
+	uuo.mutation.SetSecurityStamp(s)
+	return uuo
+}
+
+// SetNillableSecurityStamp sets the "security_stamp" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableSecurityStamp(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetSecurityStamp(*s)
+	}
+	return uuo
+}
+
+// ClearSecurityStamp clears the value of the "security_stamp" field.
+func (uuo *UserUpdateOne) ClearSecurityStamp() *UserUpdateOne {
+	uuo.mutation.ClearSecurityStamp()
+	return uuo
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (uuo *UserUpdateOne) SetPhoneNumber(s string) *UserUpdateOne {
+	uuo.mutation.SetPhoneNumber(s)
+	return uuo
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePhoneNumber(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetPhoneNumber(*s)
+	}
+	return uuo
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (uuo *UserUpdateOne) ClearPhoneNumber() *UserUpdateOne {
+	uuo.mutation.ClearPhoneNumber()
 	return uuo
 }
 
@@ -412,9 +669,45 @@ func (uuo *UserUpdateOne) AddAccessFailedCount(i int) *UserUpdateOne {
 	return uuo
 }
 
+// AddUserRoleIDs adds the "user_roles" edge to the UserRole entity by IDs.
+func (uuo *UserUpdateOne) AddUserRoleIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.AddUserRoleIDs(ids...)
+	return uuo
+}
+
+// AddUserRoles adds the "user_roles" edges to the UserRole entity.
+func (uuo *UserUpdateOne) AddUserRoles(u ...*UserRole) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.AddUserRoleIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
+}
+
+// ClearUserRoles clears all "user_roles" edges to the UserRole entity.
+func (uuo *UserUpdateOne) ClearUserRoles() *UserUpdateOne {
+	uuo.mutation.ClearUserRoles()
+	return uuo
+}
+
+// RemoveUserRoleIDs removes the "user_roles" edge to UserRole entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserRoleIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.RemoveUserRoleIDs(ids...)
+	return uuo
+}
+
+// RemoveUserRoles removes "user_roles" edges to UserRole entities.
+func (uuo *UserUpdateOne) RemoveUserRoles(u ...*UserRole) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.RemoveUserRoleIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -462,6 +755,11 @@ func (uuo *UserUpdateOne) check() error {
 	if v, ok := uuo.mutation.Username(); ok {
 		if err := user.UsernameValidator(v); err != nil {
 			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
+		}
+	}
+	if v, ok := uuo.mutation.NormalizedUsername(); ok {
+		if err := user.NormalizedUsernameValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_username", err: fmt.Errorf(`ent: validator failed for field "User.normalized_username": %w`, err)}
 		}
 	}
 	if v, ok := uuo.mutation.Email(); ok {
@@ -514,17 +812,38 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if value, ok := uuo.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
+	if value, ok := uuo.mutation.NormalizedUsername(); ok {
+		_spec.SetField(user.FieldNormalizedUsername, field.TypeString, value)
+	}
 	if value, ok := uuo.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.NormalizedEmail(); ok {
 		_spec.SetField(user.FieldNormalizedEmail, field.TypeString, value)
 	}
+	if value, ok := uuo.mutation.EmailConfirmed(); ok {
+		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+	}
 	if value, ok := uuo.mutation.PasswordHash(); ok {
 		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.EmailConfirmed(); ok {
-		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+	if value, ok := uuo.mutation.ConcurrencyStamp(); ok {
+		_spec.SetField(user.FieldConcurrencyStamp, field.TypeString, value)
+	}
+	if uuo.mutation.ConcurrencyStampCleared() {
+		_spec.ClearField(user.FieldConcurrencyStamp, field.TypeString)
+	}
+	if value, ok := uuo.mutation.SecurityStamp(); ok {
+		_spec.SetField(user.FieldSecurityStamp, field.TypeString, value)
+	}
+	if uuo.mutation.SecurityStampCleared() {
+		_spec.ClearField(user.FieldSecurityStamp, field.TypeString)
+	}
+	if value, ok := uuo.mutation.PhoneNumber(); ok {
+		_spec.SetField(user.FieldPhoneNumber, field.TypeString, value)
+	}
+	if uuo.mutation.PhoneNumberCleared() {
+		_spec.ClearField(user.FieldPhoneNumber, field.TypeString)
 	}
 	if value, ok := uuo.mutation.PhoneNumberConfirmed(); ok {
 		_spec.SetField(user.FieldPhoneNumberConfirmed, field.TypeBool, value)
@@ -540,6 +859,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.AddedAccessFailedCount(); ok {
 		_spec.AddField(user.FieldAccessFailedCount, field.TypeInt, value)
+	}
+	if uuo.mutation.UserRolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedUserRolesIDs(); len(nodes) > 0 && !uuo.mutation.UserRolesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.UserRolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

@@ -6,6 +6,7 @@ import (
 	"fiber-be-template/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -59,6 +60,11 @@ func Username(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldUsername, v))
 }
 
+// NormalizedUsername applies equality check predicate on the "normalized_username" field. It's identical to NormalizedUsernameEQ.
+func NormalizedUsername(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldNormalizedUsername, v))
+}
+
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
 func Email(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldEmail, v))
@@ -69,14 +75,29 @@ func NormalizedEmail(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldNormalizedEmail, v))
 }
 
+// EmailConfirmed applies equality check predicate on the "email_confirmed" field. It's identical to EmailConfirmedEQ.
+func EmailConfirmed(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldEmailConfirmed, v))
+}
+
 // PasswordHash applies equality check predicate on the "password_hash" field. It's identical to PasswordHashEQ.
 func PasswordHash(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPasswordHash, v))
 }
 
-// EmailConfirmed applies equality check predicate on the "email_confirmed" field. It's identical to EmailConfirmedEQ.
-func EmailConfirmed(v bool) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldEmailConfirmed, v))
+// ConcurrencyStamp applies equality check predicate on the "concurrency_stamp" field. It's identical to ConcurrencyStampEQ.
+func ConcurrencyStamp(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldConcurrencyStamp, v))
+}
+
+// SecurityStamp applies equality check predicate on the "security_stamp" field. It's identical to SecurityStampEQ.
+func SecurityStamp(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSecurityStamp, v))
+}
+
+// PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
+func PhoneNumber(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPhoneNumber, v))
 }
 
 // PhoneNumberConfirmed applies equality check predicate on the "phone_number_confirmed" field. It's identical to PhoneNumberConfirmedEQ.
@@ -162,6 +183,71 @@ func UsernameEqualFold(v string) predicate.User {
 // UsernameContainsFold applies the ContainsFold predicate on the "username" field.
 func UsernameContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldUsername, v))
+}
+
+// NormalizedUsernameEQ applies the EQ predicate on the "normalized_username" field.
+func NormalizedUsernameEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameNEQ applies the NEQ predicate on the "normalized_username" field.
+func NormalizedUsernameNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameIn applies the In predicate on the "normalized_username" field.
+func NormalizedUsernameIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldNormalizedUsername, vs...))
+}
+
+// NormalizedUsernameNotIn applies the NotIn predicate on the "normalized_username" field.
+func NormalizedUsernameNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldNormalizedUsername, vs...))
+}
+
+// NormalizedUsernameGT applies the GT predicate on the "normalized_username" field.
+func NormalizedUsernameGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameGTE applies the GTE predicate on the "normalized_username" field.
+func NormalizedUsernameGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameLT applies the LT predicate on the "normalized_username" field.
+func NormalizedUsernameLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameLTE applies the LTE predicate on the "normalized_username" field.
+func NormalizedUsernameLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameContains applies the Contains predicate on the "normalized_username" field.
+func NormalizedUsernameContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameHasPrefix applies the HasPrefix predicate on the "normalized_username" field.
+func NormalizedUsernameHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameHasSuffix applies the HasSuffix predicate on the "normalized_username" field.
+func NormalizedUsernameHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameEqualFold applies the EqualFold predicate on the "normalized_username" field.
+func NormalizedUsernameEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldNormalizedUsername, v))
+}
+
+// NormalizedUsernameContainsFold applies the ContainsFold predicate on the "normalized_username" field.
+func NormalizedUsernameContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldNormalizedUsername, v))
 }
 
 // EmailEQ applies the EQ predicate on the "email" field.
@@ -294,6 +380,16 @@ func NormalizedEmailContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldNormalizedEmail, v))
 }
 
+// EmailConfirmedEQ applies the EQ predicate on the "email_confirmed" field.
+func EmailConfirmedEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldEmailConfirmed, v))
+}
+
+// EmailConfirmedNEQ applies the NEQ predicate on the "email_confirmed" field.
+func EmailConfirmedNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldEmailConfirmed, v))
+}
+
 // PasswordHashEQ applies the EQ predicate on the "password_hash" field.
 func PasswordHashEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldPasswordHash, v))
@@ -359,14 +455,229 @@ func PasswordHashContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldPasswordHash, v))
 }
 
-// EmailConfirmedEQ applies the EQ predicate on the "email_confirmed" field.
-func EmailConfirmedEQ(v bool) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldEmailConfirmed, v))
+// ConcurrencyStampEQ applies the EQ predicate on the "concurrency_stamp" field.
+func ConcurrencyStampEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldConcurrencyStamp, v))
 }
 
-// EmailConfirmedNEQ applies the NEQ predicate on the "email_confirmed" field.
-func EmailConfirmedNEQ(v bool) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldEmailConfirmed, v))
+// ConcurrencyStampNEQ applies the NEQ predicate on the "concurrency_stamp" field.
+func ConcurrencyStampNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampIn applies the In predicate on the "concurrency_stamp" field.
+func ConcurrencyStampIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldConcurrencyStamp, vs...))
+}
+
+// ConcurrencyStampNotIn applies the NotIn predicate on the "concurrency_stamp" field.
+func ConcurrencyStampNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldConcurrencyStamp, vs...))
+}
+
+// ConcurrencyStampGT applies the GT predicate on the "concurrency_stamp" field.
+func ConcurrencyStampGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampGTE applies the GTE predicate on the "concurrency_stamp" field.
+func ConcurrencyStampGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampLT applies the LT predicate on the "concurrency_stamp" field.
+func ConcurrencyStampLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampLTE applies the LTE predicate on the "concurrency_stamp" field.
+func ConcurrencyStampLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampContains applies the Contains predicate on the "concurrency_stamp" field.
+func ConcurrencyStampContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampHasPrefix applies the HasPrefix predicate on the "concurrency_stamp" field.
+func ConcurrencyStampHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampHasSuffix applies the HasSuffix predicate on the "concurrency_stamp" field.
+func ConcurrencyStampHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampIsNil applies the IsNil predicate on the "concurrency_stamp" field.
+func ConcurrencyStampIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldConcurrencyStamp))
+}
+
+// ConcurrencyStampNotNil applies the NotNil predicate on the "concurrency_stamp" field.
+func ConcurrencyStampNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldConcurrencyStamp))
+}
+
+// ConcurrencyStampEqualFold applies the EqualFold predicate on the "concurrency_stamp" field.
+func ConcurrencyStampEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldConcurrencyStamp, v))
+}
+
+// ConcurrencyStampContainsFold applies the ContainsFold predicate on the "concurrency_stamp" field.
+func ConcurrencyStampContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldConcurrencyStamp, v))
+}
+
+// SecurityStampEQ applies the EQ predicate on the "security_stamp" field.
+func SecurityStampEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSecurityStamp, v))
+}
+
+// SecurityStampNEQ applies the NEQ predicate on the "security_stamp" field.
+func SecurityStampNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldSecurityStamp, v))
+}
+
+// SecurityStampIn applies the In predicate on the "security_stamp" field.
+func SecurityStampIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldSecurityStamp, vs...))
+}
+
+// SecurityStampNotIn applies the NotIn predicate on the "security_stamp" field.
+func SecurityStampNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldSecurityStamp, vs...))
+}
+
+// SecurityStampGT applies the GT predicate on the "security_stamp" field.
+func SecurityStampGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldSecurityStamp, v))
+}
+
+// SecurityStampGTE applies the GTE predicate on the "security_stamp" field.
+func SecurityStampGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldSecurityStamp, v))
+}
+
+// SecurityStampLT applies the LT predicate on the "security_stamp" field.
+func SecurityStampLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldSecurityStamp, v))
+}
+
+// SecurityStampLTE applies the LTE predicate on the "security_stamp" field.
+func SecurityStampLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldSecurityStamp, v))
+}
+
+// SecurityStampContains applies the Contains predicate on the "security_stamp" field.
+func SecurityStampContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldSecurityStamp, v))
+}
+
+// SecurityStampHasPrefix applies the HasPrefix predicate on the "security_stamp" field.
+func SecurityStampHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldSecurityStamp, v))
+}
+
+// SecurityStampHasSuffix applies the HasSuffix predicate on the "security_stamp" field.
+func SecurityStampHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldSecurityStamp, v))
+}
+
+// SecurityStampIsNil applies the IsNil predicate on the "security_stamp" field.
+func SecurityStampIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldSecurityStamp))
+}
+
+// SecurityStampNotNil applies the NotNil predicate on the "security_stamp" field.
+func SecurityStampNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldSecurityStamp))
+}
+
+// SecurityStampEqualFold applies the EqualFold predicate on the "security_stamp" field.
+func SecurityStampEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldSecurityStamp, v))
+}
+
+// SecurityStampContainsFold applies the ContainsFold predicate on the "security_stamp" field.
+func SecurityStampContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldSecurityStamp, v))
+}
+
+// PhoneNumberEQ applies the EQ predicate on the "phone_number" field.
+func PhoneNumberEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPhoneNumber, v))
+}
+
+// PhoneNumberNEQ applies the NEQ predicate on the "phone_number" field.
+func PhoneNumberNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldPhoneNumber, v))
+}
+
+// PhoneNumberIn applies the In predicate on the "phone_number" field.
+func PhoneNumberIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldPhoneNumber, vs...))
+}
+
+// PhoneNumberNotIn applies the NotIn predicate on the "phone_number" field.
+func PhoneNumberNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldPhoneNumber, vs...))
+}
+
+// PhoneNumberGT applies the GT predicate on the "phone_number" field.
+func PhoneNumberGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldPhoneNumber, v))
+}
+
+// PhoneNumberGTE applies the GTE predicate on the "phone_number" field.
+func PhoneNumberGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldPhoneNumber, v))
+}
+
+// PhoneNumberLT applies the LT predicate on the "phone_number" field.
+func PhoneNumberLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldPhoneNumber, v))
+}
+
+// PhoneNumberLTE applies the LTE predicate on the "phone_number" field.
+func PhoneNumberLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldPhoneNumber, v))
+}
+
+// PhoneNumberContains applies the Contains predicate on the "phone_number" field.
+func PhoneNumberContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldPhoneNumber, v))
+}
+
+// PhoneNumberHasPrefix applies the HasPrefix predicate on the "phone_number" field.
+func PhoneNumberHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldPhoneNumber, v))
+}
+
+// PhoneNumberHasSuffix applies the HasSuffix predicate on the "phone_number" field.
+func PhoneNumberHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldPhoneNumber, v))
+}
+
+// PhoneNumberIsNil applies the IsNil predicate on the "phone_number" field.
+func PhoneNumberIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldPhoneNumber))
+}
+
+// PhoneNumberNotNil applies the NotNil predicate on the "phone_number" field.
+func PhoneNumberNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldPhoneNumber))
+}
+
+// PhoneNumberEqualFold applies the EqualFold predicate on the "phone_number" field.
+func PhoneNumberEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldPhoneNumber, v))
+}
+
+// PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
+func PhoneNumberContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldPhoneNumber, v))
 }
 
 // PhoneNumberConfirmedEQ applies the EQ predicate on the "phone_number_confirmed" field.
@@ -437,6 +748,29 @@ func AccessFailedCountLT(v int) predicate.User {
 // AccessFailedCountLTE applies the LTE predicate on the "access_failed_count" field.
 func AccessFailedCountLTE(v int) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldAccessFailedCount, v))
+}
+
+// HasUserRoles applies the HasEdge predicate on the "user_roles" edge.
+func HasUserRoles() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, UserRolesTable, UserRolesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserRolesWith applies the HasEdge predicate on the "user_roles" edge with a given conditions (other predicates).
+func HasUserRolesWith(preds ...predicate.UserRole) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newUserRolesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

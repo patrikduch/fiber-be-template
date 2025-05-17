@@ -5,7 +5,9 @@ package ent
 import (
 	"context"
 	"errors"
+	"fiber-be-template/ent/role"
 	"fiber-be-template/ent/user"
+	"fiber-be-template/ent/userrole"
 	"fmt"
 	"reflect"
 	"sync"
@@ -73,7 +75,9 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			user.Table: user.ValidColumn,
+			role.Table:     role.ValidColumn,
+			user.Table:     user.ValidColumn,
+			userrole.Table: userrole.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

@@ -3,8 +3,10 @@
 package ent
 
 import (
+	"fiber-be-template/ent/role"
 	"fiber-be-template/ent/schema"
 	"fiber-be-template/ent/user"
+	"fiber-be-template/ent/userrole"
 
 	"github.com/google/uuid"
 )
@@ -13,46 +15,70 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	roleFields := schema.Role{}.Fields()
+	_ = roleFields
+	// roleDescName is the schema descriptor for name field.
+	roleDescName := roleFields[1].Descriptor()
+	// role.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	role.NameValidator = roleDescName.Validators[0].(func(string) error)
+	// roleDescNormalizedName is the schema descriptor for normalized_name field.
+	roleDescNormalizedName := roleFields[2].Descriptor()
+	// role.NormalizedNameValidator is a validator for the "normalized_name" field. It is called by the builders before save.
+	role.NormalizedNameValidator = roleDescNormalizedName.Validators[0].(func(string) error)
+	// roleDescID is the schema descriptor for id field.
+	roleDescID := roleFields[0].Descriptor()
+	// role.DefaultID holds the default value on creation for the id field.
+	role.DefaultID = roleDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescUsername is the schema descriptor for username field.
 	userDescUsername := userFields[1].Descriptor()
 	// user.UsernameValidator is a validator for the "username" field. It is called by the builders before save.
 	user.UsernameValidator = userDescUsername.Validators[0].(func(string) error)
+	// userDescNormalizedUsername is the schema descriptor for normalized_username field.
+	userDescNormalizedUsername := userFields[2].Descriptor()
+	// user.NormalizedUsernameValidator is a validator for the "normalized_username" field. It is called by the builders before save.
+	user.NormalizedUsernameValidator = userDescNormalizedUsername.Validators[0].(func(string) error)
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[2].Descriptor()
+	userDescEmail := userFields[3].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = userDescEmail.Validators[0].(func(string) error)
 	// userDescNormalizedEmail is the schema descriptor for normalized_email field.
-	userDescNormalizedEmail := userFields[3].Descriptor()
+	userDescNormalizedEmail := userFields[4].Descriptor()
 	// user.NormalizedEmailValidator is a validator for the "normalized_email" field. It is called by the builders before save.
 	user.NormalizedEmailValidator = userDescNormalizedEmail.Validators[0].(func(string) error)
-	// userDescPasswordHash is the schema descriptor for password_hash field.
-	userDescPasswordHash := userFields[4].Descriptor()
-	// user.PasswordHashValidator is a validator for the "password_hash" field. It is called by the builders before save.
-	user.PasswordHashValidator = userDescPasswordHash.Validators[0].(func(string) error)
 	// userDescEmailConfirmed is the schema descriptor for email_confirmed field.
 	userDescEmailConfirmed := userFields[5].Descriptor()
 	// user.DefaultEmailConfirmed holds the default value on creation for the email_confirmed field.
 	user.DefaultEmailConfirmed = userDescEmailConfirmed.Default.(bool)
+	// userDescPasswordHash is the schema descriptor for password_hash field.
+	userDescPasswordHash := userFields[6].Descriptor()
+	// user.PasswordHashValidator is a validator for the "password_hash" field. It is called by the builders before save.
+	user.PasswordHashValidator = userDescPasswordHash.Validators[0].(func(string) error)
 	// userDescPhoneNumberConfirmed is the schema descriptor for phone_number_confirmed field.
-	userDescPhoneNumberConfirmed := userFields[6].Descriptor()
+	userDescPhoneNumberConfirmed := userFields[10].Descriptor()
 	// user.DefaultPhoneNumberConfirmed holds the default value on creation for the phone_number_confirmed field.
 	user.DefaultPhoneNumberConfirmed = userDescPhoneNumberConfirmed.Default.(bool)
 	// userDescTwoFactorEnabled is the schema descriptor for two_factor_enabled field.
-	userDescTwoFactorEnabled := userFields[7].Descriptor()
+	userDescTwoFactorEnabled := userFields[11].Descriptor()
 	// user.DefaultTwoFactorEnabled holds the default value on creation for the two_factor_enabled field.
 	user.DefaultTwoFactorEnabled = userDescTwoFactorEnabled.Default.(bool)
 	// userDescLockoutEnabled is the schema descriptor for lockout_enabled field.
-	userDescLockoutEnabled := userFields[8].Descriptor()
+	userDescLockoutEnabled := userFields[12].Descriptor()
 	// user.DefaultLockoutEnabled holds the default value on creation for the lockout_enabled field.
 	user.DefaultLockoutEnabled = userDescLockoutEnabled.Default.(bool)
 	// userDescAccessFailedCount is the schema descriptor for access_failed_count field.
-	userDescAccessFailedCount := userFields[9].Descriptor()
+	userDescAccessFailedCount := userFields[13].Descriptor()
 	// user.DefaultAccessFailedCount holds the default value on creation for the access_failed_count field.
 	user.DefaultAccessFailedCount = userDescAccessFailedCount.Default.(int)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
 	user.DefaultID = userDescID.Default.(func() uuid.UUID)
+	userroleFields := schema.UserRole{}.Fields()
+	_ = userroleFields
+	// userroleDescID is the schema descriptor for id field.
+	userroleDescID := userroleFields[0].Descriptor()
+	// userrole.DefaultID holds the default value on creation for the id field.
+	userrole.DefaultID = userroleDescID.Default.(func() uuid.UUID)
 }

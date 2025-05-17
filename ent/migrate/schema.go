@@ -3,19 +3,37 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
+	// RoleColumns holds the columns for the "Role" table.
+	RoleColumns = []*schema.Column{
+		{Name: "Id", Type: field.TypeUUID},
+		{Name: "Name", Type: field.TypeString},
+		{Name: "NormalizedName", Type: field.TypeString},
+		{Name: "ConcurrencyStamp", Type: field.TypeString, Nullable: true},
+	}
+	// RoleTable holds the schema information for the "Role" table.
+	RoleTable = &schema.Table{
+		Name:       "Role",
+		Columns:    RoleColumns,
+		PrimaryKey: []*schema.Column{RoleColumns[0]},
+	}
 	// UserColumns holds the columns for the "User" table.
 	UserColumns = []*schema.Column{
 		{Name: "Id", Type: field.TypeUUID},
 		{Name: "UserName", Type: field.TypeString},
-		{Name: "Email", Type: field.TypeString, Unique: true},
+		{Name: "NormalizedUserName", Type: field.TypeString},
+		{Name: "Email", Type: field.TypeString},
 		{Name: "NormalizedEmail", Type: field.TypeString},
-		{Name: "PasswordHash", Type: field.TypeString},
 		{Name: "EmailConfirmed", Type: field.TypeBool, Default: false},
+		{Name: "PasswordHash", Type: field.TypeString},
+		{Name: "ConcurrencyStamp", Type: field.TypeString, Nullable: true},
+		{Name: "SecurityStamp", Type: field.TypeString, Nullable: true},
+		{Name: "PhoneNumber", Type: field.TypeString, Nullable: true},
 		{Name: "PhoneNumberConfirmed", Type: field.TypeBool, Default: false},
 		{Name: "TwoFactorEnabled", Type: field.TypeBool, Default: false},
 		{Name: "LockoutEnabled", Type: field.TypeBool, Default: false},
@@ -27,11 +45,57 @@ var (
 		Columns:    UserColumns,
 		PrimaryKey: []*schema.Column{UserColumns[0]},
 	}
+	// UserRoleColumns holds the columns for the "UserRole" table.
+	UserRoleColumns = []*schema.Column{
+		{Name: "Id", Type: field.TypeUUID},
+		{Name: "RoleId", Type: field.TypeUUID},
+		{Name: "UserId", Type: field.TypeUUID},
+	}
+	// UserRoleTable holds the schema information for the "UserRole" table.
+	UserRoleTable = &schema.Table{
+		Name:       "UserRole",
+		Columns:    UserRoleColumns,
+		PrimaryKey: []*schema.Column{UserRoleColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "UserRole_Role_user_roles",
+				Columns:    []*schema.Column{UserRoleColumns[1]},
+				RefColumns: []*schema.Column{RoleColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "UserRole_User_user_roles",
+				Columns:    []*schema.Column{UserRoleColumns[2]},
+				RefColumns: []*schema.Column{UserColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "userrole_UserId_RoleId",
+				Unique:  true,
+				Columns: []*schema.Column{UserRoleColumns[2], UserRoleColumns[1]},
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		RoleTable,
 		UserTable,
+		UserRoleTable,
 	}
 )
 
 func init() {
+	RoleTable.Annotation = &entsql.Annotation{
+		Table: "Role",
+	}
+	UserTable.Annotation = &entsql.Annotation{
+		Table: "User",
+	}
+	UserRoleTable.ForeignKeys[0].RefTable = RoleTable
+	UserRoleTable.ForeignKeys[1].RefTable = UserTable
+	UserRoleTable.Annotation = &entsql.Annotation{
+		Table: "UserRole",
+	}
 }

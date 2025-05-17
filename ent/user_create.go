@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fiber-be-template/ent/user"
+	"fiber-be-template/ent/userrole"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,6 +27,12 @@ func (uc *UserCreate) SetUsername(s string) *UserCreate {
 	return uc
 }
 
+// SetNormalizedUsername sets the "normalized_username" field.
+func (uc *UserCreate) SetNormalizedUsername(s string) *UserCreate {
+	uc.mutation.SetNormalizedUsername(s)
+	return uc
+}
+
 // SetEmail sets the "email" field.
 func (uc *UserCreate) SetEmail(s string) *UserCreate {
 	uc.mutation.SetEmail(s)
@@ -35,12 +42,6 @@ func (uc *UserCreate) SetEmail(s string) *UserCreate {
 // SetNormalizedEmail sets the "normalized_email" field.
 func (uc *UserCreate) SetNormalizedEmail(s string) *UserCreate {
 	uc.mutation.SetNormalizedEmail(s)
-	return uc
-}
-
-// SetPasswordHash sets the "password_hash" field.
-func (uc *UserCreate) SetPasswordHash(s string) *UserCreate {
-	uc.mutation.SetPasswordHash(s)
 	return uc
 }
 
@@ -54,6 +55,54 @@ func (uc *UserCreate) SetEmailConfirmed(b bool) *UserCreate {
 func (uc *UserCreate) SetNillableEmailConfirmed(b *bool) *UserCreate {
 	if b != nil {
 		uc.SetEmailConfirmed(*b)
+	}
+	return uc
+}
+
+// SetPasswordHash sets the "password_hash" field.
+func (uc *UserCreate) SetPasswordHash(s string) *UserCreate {
+	uc.mutation.SetPasswordHash(s)
+	return uc
+}
+
+// SetConcurrencyStamp sets the "concurrency_stamp" field.
+func (uc *UserCreate) SetConcurrencyStamp(s string) *UserCreate {
+	uc.mutation.SetConcurrencyStamp(s)
+	return uc
+}
+
+// SetNillableConcurrencyStamp sets the "concurrency_stamp" field if the given value is not nil.
+func (uc *UserCreate) SetNillableConcurrencyStamp(s *string) *UserCreate {
+	if s != nil {
+		uc.SetConcurrencyStamp(*s)
+	}
+	return uc
+}
+
+// SetSecurityStamp sets the "security_stamp" field.
+func (uc *UserCreate) SetSecurityStamp(s string) *UserCreate {
+	uc.mutation.SetSecurityStamp(s)
+	return uc
+}
+
+// SetNillableSecurityStamp sets the "security_stamp" field if the given value is not nil.
+func (uc *UserCreate) SetNillableSecurityStamp(s *string) *UserCreate {
+	if s != nil {
+		uc.SetSecurityStamp(*s)
+	}
+	return uc
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (uc *UserCreate) SetPhoneNumber(s string) *UserCreate {
+	uc.mutation.SetPhoneNumber(s)
+	return uc
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePhoneNumber(s *string) *UserCreate {
+	if s != nil {
+		uc.SetPhoneNumber(*s)
 	}
 	return uc
 }
@@ -128,6 +177,21 @@ func (uc *UserCreate) SetNillableID(u *uuid.UUID) *UserCreate {
 	return uc
 }
 
+// AddUserRoleIDs adds the "user_roles" edge to the UserRole entity by IDs.
+func (uc *UserCreate) AddUserRoleIDs(ids ...uuid.UUID) *UserCreate {
+	uc.mutation.AddUserRoleIDs(ids...)
+	return uc
+}
+
+// AddUserRoles adds the "user_roles" edges to the UserRole entity.
+func (uc *UserCreate) AddUserRoles(u ...*UserRole) *UserCreate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uc.AddUserRoleIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -199,6 +263,14 @@ func (uc *UserCreate) check() error {
 			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
 		}
 	}
+	if _, ok := uc.mutation.NormalizedUsername(); !ok {
+		return &ValidationError{Name: "normalized_username", err: errors.New(`ent: missing required field "User.normalized_username"`)}
+	}
+	if v, ok := uc.mutation.NormalizedUsername(); ok {
+		if err := user.NormalizedUsernameValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_username", err: fmt.Errorf(`ent: validator failed for field "User.normalized_username": %w`, err)}
+		}
+	}
 	if _, ok := uc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "User.email"`)}
 	}
@@ -215,6 +287,9 @@ func (uc *UserCreate) check() error {
 			return &ValidationError{Name: "normalized_email", err: fmt.Errorf(`ent: validator failed for field "User.normalized_email": %w`, err)}
 		}
 	}
+	if _, ok := uc.mutation.EmailConfirmed(); !ok {
+		return &ValidationError{Name: "email_confirmed", err: errors.New(`ent: missing required field "User.email_confirmed"`)}
+	}
 	if _, ok := uc.mutation.PasswordHash(); !ok {
 		return &ValidationError{Name: "password_hash", err: errors.New(`ent: missing required field "User.password_hash"`)}
 	}
@@ -222,9 +297,6 @@ func (uc *UserCreate) check() error {
 		if err := user.PasswordHashValidator(v); err != nil {
 			return &ValidationError{Name: "password_hash", err: fmt.Errorf(`ent: validator failed for field "User.password_hash": %w`, err)}
 		}
-	}
-	if _, ok := uc.mutation.EmailConfirmed(); !ok {
-		return &ValidationError{Name: "email_confirmed", err: errors.New(`ent: missing required field "User.email_confirmed"`)}
 	}
 	if _, ok := uc.mutation.PhoneNumberConfirmed(); !ok {
 		return &ValidationError{Name: "phone_number_confirmed", err: errors.New(`ent: missing required field "User.phone_number_confirmed"`)}
@@ -277,6 +349,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 		_node.Username = value
 	}
+	if value, ok := uc.mutation.NormalizedUsername(); ok {
+		_spec.SetField(user.FieldNormalizedUsername, field.TypeString, value)
+		_node.NormalizedUsername = value
+	}
 	if value, ok := uc.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 		_node.Email = value
@@ -285,13 +361,25 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldNormalizedEmail, field.TypeString, value)
 		_node.NormalizedEmail = value
 	}
+	if value, ok := uc.mutation.EmailConfirmed(); ok {
+		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
+		_node.EmailConfirmed = value
+	}
 	if value, ok := uc.mutation.PasswordHash(); ok {
 		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
 		_node.PasswordHash = value
 	}
-	if value, ok := uc.mutation.EmailConfirmed(); ok {
-		_spec.SetField(user.FieldEmailConfirmed, field.TypeBool, value)
-		_node.EmailConfirmed = value
+	if value, ok := uc.mutation.ConcurrencyStamp(); ok {
+		_spec.SetField(user.FieldConcurrencyStamp, field.TypeString, value)
+		_node.ConcurrencyStamp = value
+	}
+	if value, ok := uc.mutation.SecurityStamp(); ok {
+		_spec.SetField(user.FieldSecurityStamp, field.TypeString, value)
+		_node.SecurityStamp = value
+	}
+	if value, ok := uc.mutation.PhoneNumber(); ok {
+		_spec.SetField(user.FieldPhoneNumber, field.TypeString, value)
+		_node.PhoneNumber = value
 	}
 	if value, ok := uc.mutation.PhoneNumberConfirmed(); ok {
 		_spec.SetField(user.FieldPhoneNumberConfirmed, field.TypeBool, value)
@@ -308,6 +396,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.AccessFailedCount(); ok {
 		_spec.SetField(user.FieldAccessFailedCount, field.TypeInt, value)
 		_node.AccessFailedCount = value
+	}
+	if nodes := uc.mutation.UserRolesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserRolesTable,
+			Columns: []string{user.UserRolesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userrole.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
