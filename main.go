@@ -9,55 +9,56 @@
 package main
 
 import (
-    "log"
+	"log"
 
-     "os"
+	"os"
 
-    "github.com/gofiber/fiber/v2"
-    "github.com/gofiber/fiber/v2/middleware/logger"
-    "github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 
-    "fiber-be-template/routes"
+	"fiber-be-template/routes"
+
+	"fiber-be-template/database"
+	_ "fiber-be-template/docs" // 👈 Generated docs
 
 	"github.com/gofiber/swagger" // 👈 Swagger UI handler
-    _ "fiber-be-template/docs" // 👈 Generated docs
 	"github.com/joho/godotenv"
-	"fiber-be-template/database"
 )
 
 func main() {
-    app := fiber.New()
+	app := fiber.New()
 
- 	// Load environment variables
-    if err := godotenv.Load(); err != nil {
-        log.Println("⚠️  .env file not found, using system env vars")
-    }
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️  .env file not found, using system env vars")
+	}
 
-    // Initialize DB
-    database.Init()
+	// Initialize DB
+	database.Init()
+	defer database.Close() // calls after close
 
-    // Middleware
-    app.Use(logger.New())
-    app.Use(cors.New())
+	// Middleware
+	app.Use(logger.New())
+	app.Use(cors.New())
 
-	   // Swagger UI
-    app.Get("/swagger/*", swagger.HandlerDefault)
+	// Swagger UI
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
-    // Register user routes
-    routes.RegisterUserRoutes(app);
-	routes.RegisterHealthRoutes(app);
-    routes.RegisterAuthRoutes(app);
+	// Register user routes
+	routes.RegisterUserRoutes(app)
+	routes.RegisterHealthRoutes(app)
+	routes.RegisterAuthRoutes(app)
 
+	// Get port from env or fallback
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
 
-    // Get port from env or fallback
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "3000"
-    }
+	// Start server
+	log.Fatal(app.Listen(":" + port))
 
-    // Start server
-    log.Fatal(app.Listen(":" + port))
-
-    // Start server
-    log.Fatal(app.Listen(":3000"))
+	// Start server
+	log.Fatal(app.Listen(":3000"))
 }
