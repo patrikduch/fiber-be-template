@@ -44,9 +44,13 @@ func Init() {
 
 func Close() {
 	if DB != nil {
-		DB.Close()
+		if err := DB.Close(); err != nil {
+			log.Printf("Error closing DB connection: %v", err)
+		}
 	}
 	if EntClient != nil {
-		EntClient.Close()
+		if err := EntClient.Close(); err != nil {
+			log.Printf("Error closing Ent client: %v", err)
+		}
 	}
 }
